@@ -1,0 +1,119 @@
+"use client";
+
+import { Mail, Phone, MapPin, Clock } from "lucide-react";
+
+export default function ContactPage() {
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-orange-50 py-12">
+      <div className="max-w-7xl mx-auto px-6">
+
+        <div className="text-center mb-12">
+          <p className="text-orange-500 uppercase tracking-[4px] font-semibold">
+            KRITHIKSHA MART
+          </p>
+
+          <h1 className="text-5xl font-extrabold mt-2">
+            Contact Us
+          </h1>
+
+          <p className="text-gray-500 mt-4">
+            We'd love to hear from you. Reach us anytime.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-10">
+
+          {/* Contact Form */}
+
+          <div className="bg-white rounded-3xl shadow-xl p-8">
+
+            <h2 className="text-3xl font-bold mb-6">
+              Send a Message
+            </h2>
+
+            <div className="space-y-5">
+
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full h-14 border-2 border-gray-200 rounded-xl px-5 focus:border-orange-500 outline-none"
+              />
+
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full h-14 border-2 border-gray-200 rounded-xl px-5 focus:border-orange-500 outline-none"
+              />
+
+              <input
+                type="text"
+                placeholder="Subject"
+                className="w-full h-14 border-2 border-gray-200 rounded-xl px-5 focus:border-orange-500 outline-none"
+              />
+
+              <textarea
+                rows={6}
+                placeholder="Write your message..."
+                className="w-full border-2 border-gray-200 rounded-xl p-5 focus:border-orange-500 outline-none"
+              />
+
+              <button className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold hover:scale-105 transition">
+                Send Message
+              </button>
+
+            </div>
+
+          </div>
+
+          {/* Contact Info */}
+
+          <div className="space-y-6">
+
+            <div className="bg-white rounded-3xl shadow-xl p-6 flex items-center gap-4">
+              <Mail className="text-orange-500" size={28} />
+              <div>
+                <h3 className="font-bold text-lg">Email</h3>
+                <p className="text-gray-500">
+                  support@krithikshamart.com
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-xl p-6 flex items-center gap-4">
+              <Phone className="text-green-500" size={28} />
+              <div>
+                <h3 className="font-bold text-lg">Phone</h3>
+                <p className="text-gray-500">
+                  +91 9876543210
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-xl p-6 flex items-center gap-4">
+              <MapPin className="text-red-500" size={28} />
+              <div>
+                <h3 className="font-bold text-lg">Address</h3>
+                <p className="text-gray-500">
+                  Pollachi, Tamil Nadu, India
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-xl p-6 flex items-center gap-4">
+              <Clock className="text-blue-500" size={28} />
+              <div>
+                <h3 className="font-bold text-lg">Business Hours</h3>
+                <p className="text-gray-500">
+                  Mon - Sat : 9:00 AM - 8:00 PM
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  );
+}
