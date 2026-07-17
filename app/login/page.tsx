@@ -1,9 +1,72 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Mail, Lock, LogIn } from "lucide-react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "sonner";
+import {
+  Mail,
+  Lock,
+  LogIn,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+
 
 export default function LoginPage() {
+  const router = useRouter();
+
+const [loading, setLoading] = useState(false);
+
+const [showPassword, setShowPassword] = useState(false);
+
+const [formData, setFormData] = useState({
+  email: "",
+  password: "",
+});
+
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+  });
+};
+const handleLogin = async () => {
+  if (!formData.email || !formData.password) {
+    return toast.error("Please fill all fields");
+  }
+
+  try {
+    setLoading(true);
+
+    const res = await axios.post(
+      "http://localhost:5001/api/auth/login",
+      formData
+    );
+
+    localStorage.setItem("token", res.data.token);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(res.data.user)
+    );
+
+    toast.success("Login Successful");
+
+    router.push("/");
+  } catch (error: any) {
+    console.log('error.response', error);
+    toast.error(
+      error.response?.data?.message ||
+      "Login Failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 flex items-center justify-center px-6 py-12">
 
@@ -41,12 +104,14 @@ export default function LoginPage() {
 
               <Mail className="text-gray-400" size={20} />
 
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full p-4 outline-none bg-transparent text-gray-800 placeholder:text-gray-400"
-              />
-
+            <input
+  type="email"
+  name="email"
+  value={formData.email}
+  onChange={handleChange}
+  placeholder="Enter your email"
+  className="w-full p-4 outline-none bg-transparent text-gray-800 placeholder:text-gray-400"
+/>
             </div>
 
           </div>
@@ -61,12 +126,25 @@ export default function LoginPage() {
 
               <Lock className="text-gray-400" size={20} />
 
-              <input
-                type="password"
-                placeholder="Enter your password"
-                className="w-full p-4 outline-none bg-transparent text-gray-800 placeholder:text-gray-400"
-              />
+             <input
+  type={showPassword ? "text" : "password"}
+  name="password"
+  value={formData.password}
+  onChange={handleChange}
+  placeholder="Enter your password"
+  className="w-full p-4 outline-none bg-transparent text-gray-800 placeholder:text-gray-400"
+/>
 
+<button
+  type="button"
+  onClick={() => setShowPassword(!showPassword)}
+>
+  {showPassword ? (
+    <EyeOff className="text-gray-400" size={20} />
+  ) : (
+    <Eye className="text-gray-400" size={20} />
+  )}
+</button>
             </div>
 
           </div>
@@ -83,12 +161,13 @@ export default function LoginPage() {
           </div>
 
           <button
-            className="w-full mt-8 flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-105 transition duration-300"
-          >
+  onClick={handleLogin}
+  disabled={loading}
+  className="w-full mt-8 flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
+>
+<LogIn size={22} />
 
-            <LogIn size={22} />
-
-            Login
+{loading ? "Logging In..." : "Login"}
 
           </button>
 

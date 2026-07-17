@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -23,6 +24,7 @@ const navItems = [
 ];
 
 export default function Header() {
+  const { wishlistCount } = useWishlist();
   const { cartCount } = useCart();
   const pathname = usePathname();
 
@@ -82,8 +84,13 @@ export default function Header() {
               className="relative hover:text-orange-500 transition"
             >
               <Heart />
-            </Link>
 
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs h-5 w-5 rounded-full flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
             <Link
               href="/cart"
               className="relative hover:text-orange-500 transition"
@@ -140,11 +147,10 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`font-medium transition ${
-                  pathname === item.href
+                className={`font-medium transition ${pathname === item.href
                     ? "text-blue-700 border-b-2 border-blue-700 pb-1"
                     : "text-gray-700 hover:text-orange-500"
-                }`}
+                  }`}
               >
 
                 {item.name}

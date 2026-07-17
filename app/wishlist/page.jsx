@@ -1,26 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Heart } from "lucide-react";
-
+import { Heart, ShoppingCart, Trash2 } from "lucide-react";
+import { useWishlist } from "@/context/WishlistContext";
+import { useCart } from "@/context/CartContext";
+import Image from "next/image";
 export default function WishlistPage() {
-    const wishlist = [
-        {
-            _id: "1",
-            name: "Apple iPhone 16 Pro",
-            category: "Smartphone",
-            price: 129999,
-            image: "/products/default.jpg",
-        },
-        {
-            _id: "2",
-            name: "Sony WH-1000XM5",
-            category: "Headphones",
-            price: 29999,
-            image: "/products/default.jpg",
-        },
-    ];
+    const {
+        wishlist,
+        removeFromWishlist,
+    } = useWishlist();
 
+    const { addToCart } = useCart();
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-pink-50 py-12">
             <div className="max-w-7xl mx-auto px-6">
@@ -82,11 +73,13 @@ export default function WishlistPage() {
                                     key={item._id}
                                     className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition duration-300"
                                 >
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        className="w-full h-60 object-cover"
-                                    />
+                                    <Image
+    src={item.image}
+    alt={item.name}
+    width={500}
+    height={400}
+    className="w-full h-60 object-cover"
+/>
 
                                     <div className="p-6">
 
@@ -104,12 +97,22 @@ export default function WishlistPage() {
 
                                         <div className="flex gap-3 mt-8">
 
-                                            <button className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-xl font-semibold hover:scale-105 transition">
+                                            <button
+                                                onClick={() => {
+                                                    addToCart(item);
+                                                    removeFromWishlist(item._id);
+                                                }}
+                                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-xl font-semibold hover:scale-105 transition"
+                                            >
+                                                <ShoppingCart size={18} />
                                                 Move to Cart
                                             </button>
 
-                                            <button className="px-5 border-2 border-red-500 text-red-500 rounded-xl font-semibold hover:bg-red-50 transition">
-                                                Remove
+                                            <button
+                                                onClick={() => removeFromWishlist(item._id)}
+                                                className="px-5 border-2 border-red-500 text-red-500 rounded-xl hover:bg-red-50 transition flex items-center justify-center"
+                                            >
+                                                <Trash2 size={18} />
                                             </button>
 
                                         </div>
