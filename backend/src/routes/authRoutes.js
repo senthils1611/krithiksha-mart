@@ -1,25 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const { register, login } = require("../controllers/authController");
-
-router.post("/register", register);
-//router.post("/login", login);
-
-console.log("authRoutes.js loaded");
-
-router.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "GET Auth OK",
-  });
+router.get("/test", (req, res) => {
+  res.json({ ok: true });
 });
 
-router.post("/login", (req, res) => {
-  res.json({
-    success: true,
-    message: "POST Login OK",
-  });
-});
+console.log("authRoutes loaded");
 
+const { login } = require("../controllers/authController");
+
+router.post("/login", login);
 module.exports = router;
+
+
