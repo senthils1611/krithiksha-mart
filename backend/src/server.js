@@ -8,14 +8,11 @@ const userRoutes = require("./routes/userRoutes");
 
 require("dotenv").config();
 
-console.log("🔥 THIS IS MY REAL SERVER.JS");
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-console.log("server.js loaded");
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
