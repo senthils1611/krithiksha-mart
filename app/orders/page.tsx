@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Package,
   CalendarDays,
@@ -8,23 +10,36 @@ import {
   Truck,
   ArrowRight,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { getMyOrders } from "@/lib/api";
 
-const orders = [
-  {
-    id: "KM100001",
-    date: "16 Jul 2026",
-    total: 79999,
-    status: "Processing",
-  },
-  {
-    id: "KM100002",
-    date: "10 Jul 2026",
-    total: 2499,
-    status: "Delivered",
-  },
-];
+type Order = {
+  _id: string;
+  totalAmount: number;
+  orderStatus: string;
+  createdAt: string;
+};
 
 export default function OrdersPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login");
+      return;
+    }
+
+    if (user) {
+      getMyOrders()
+        .then((data) => setOrders(data.orders))
+        .catch(() => setOrders([]))
+        .finally(() => setLoading(false));
+    }
+  }, [authLoading, user, router]);
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-orange-50 py-12">
       <div className="max-w-7xl mx-auto px-6">
@@ -47,7 +62,13 @@ export default function OrdersPage() {
 
         </div>
 
-        {orders.length === 0 ? (
+        {loading || authLoading ? (
+
+          <div className="bg-white rounded-3xl shadow-xl p-14 text-center text-gray-500">
+            Loading your orders...
+          </div>
+
+        ) : orders.length === 0 ? (
 
           <div className="bg-white rounded-3xl shadow-xl p-14 text-center">
 
@@ -81,7 +102,7 @@ export default function OrdersPage() {
             {orders.map((order) => (
 
               <div
-                key={order.id}
+                key={order._id}
                 className="bg-white rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 p-8"
               >
 
@@ -102,7 +123,7 @@ export default function OrdersPage() {
                       </p>
 
                       <h3 className="font-bold text-lg">
-                        {order.id}
+                        KM{order._id.slice(-8).toUpperCase()}
                       </h3>
 
                     </div>
@@ -124,7 +145,7 @@ export default function OrdersPage() {
                       </p>
 
                       <h3 className="font-semibold">
-                        {order.date}
+                        {new Date(order.createdAt).toLocaleDateString()}
                       </h3>
 
                     </div>
@@ -146,7 +167,7 @@ export default function OrdersPage() {
                       </p>
 
                       <h3 className="font-bold text-orange-500 text-xl">
-                        ₹{order.total.toLocaleString()}
+                        ₹{order.totalAmount.toLocaleString()}
                       </h3>
 
                     </div>
@@ -169,31 +190,19 @@ export default function OrdersPage() {
 
                       <span
                         className={`inline-flex mt-1 px-4 py-2 rounded-full text-sm font-semibold ${
-                          order.status === "Delivered"
+                          order.orderStatus === "Delivered"
                             ? "bg-green-100 text-green-700"
+                            : order.orderStatus === "Cancelled"
+                            ? "bg-red-100 text-red-700"
                             : "bg-yellow-100 text-yellow-700"
                         }`}
                       >
-                        {order.status}
+                        {order.orderStatus}
                       </span>
 
                     </div>
 
                   </div>
-
-                </div>
-
-                {/* Buttons */}
-
-                <div className="flex flex-wrap gap-4 mt-8">
-
-                  <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold hover:scale-105 transition">
-                    View Details
-                  </button>
-
-                  <button className="px-6 py-3 rounded-xl border-2 border-orange-500 text-orange-600 font-semibold hover:bg-orange-50 transition">
-                    Track Order
-                  </button>
 
                 </div>
 

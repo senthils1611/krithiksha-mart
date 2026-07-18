@@ -13,6 +13,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -26,6 +27,7 @@ const navItems = [
 export default function Header() {
   const { wishlistCount } = useWishlist();
   const { cartCount } = useCart();
+  const { user, logout } = useAuth();
   const pathname = usePathname();
 
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -110,12 +112,40 @@ export default function Header() {
 
             </Link>
 
-            <Link
-              href="/profile"
-              className="hover:text-orange-500 transition"
-            >
-              <User />
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-4">
+                {user.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    className="text-sm font-semibold text-blue-700 hover:text-orange-500 transition"
+                  >
+                    Admin
+                  </Link>
+                )}
+
+                <Link
+                  href="/profile"
+                  className="hover:text-orange-500 transition"
+                  title={user.name}
+                >
+                  <User />
+                </Link>
+
+                <button
+                  onClick={logout}
+                  className="text-sm font-medium text-gray-600 hover:text-orange-500 transition"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="hover:text-orange-500 transition"
+              >
+                <User />
+              </Link>
+            )}
 
           </div>
 
@@ -204,10 +234,41 @@ export default function Header() {
 
             <Link
               href="/cart"
-              className="px-6 py-4"
+              className="px-6 py-4 border-b"
             >
               Cart ({cartCount})
             </Link>
+
+            {user ? (
+              <>
+                {user.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMobileMenu(false)}
+                    className="px-6 py-4 border-b"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    setMobileMenu(false);
+                    logout();
+                  }}
+                  className="px-6 py-4 text-left"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenu(false)}
+                className="px-6 py-4"
+              >
+                Login
+              </Link>
+            )}
 
           </nav>
 

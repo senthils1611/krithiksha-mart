@@ -1,90 +1,86 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Package,
   ShoppingCart,
   Users,
   IndianRupee,
-  TrendingUp,
-  TrendingDown,
 } from "lucide-react";
+import { getAllOrders, getProducts, getAllUsers } from "@/lib/api";
 
-const stats = [
-  {
-    title: "Total Revenue",
-    value: "₹2,48,550",
-    change: "+12.8%",
-    icon: IndianRupee,
-    color: "bg-green-100 text-green-600",
-  },
-  {
-    title: "Orders",
-    value: "1,245",
-    change: "+8.5%",
-    icon: ShoppingCart,
-    color: "bg-blue-100 text-blue-600",
-  },
-  {
-    title: "Products",
-    value: "325",
-    change: "+15%",
-    icon: Package,
-    color: "bg-orange-100 text-orange-600",
-  },
-  {
-    title: "Customers",
-    value: "872",
-    change: "+18%",
-    icon: Users,
-    color: "bg-purple-100 text-purple-600",
-  },
-];
-
-const recentOrders = [
-  {
-    id: "#1001",
-    customer: "Senthil",
-    amount: "₹2,450",
-    status: "Delivered",
-  },
-  {
-    id: "#1002",
-    customer: "Rahul",
-    amount: "₹980",
-    status: "Processing",
-  },
-  {
-    id: "#1003",
-    customer: "Karthik",
-    amount: "₹5,600",
-    status: "Cancelled",
-  },
-  {
-    id: "#1004",
-    customer: "Arun",
-    amount: "₹1,850",
-    status: "Shipped",
-  },
-];
-
-const topProducts = [
-  {
-    name: "Wireless Headphones",
-    sold: 145,
-  },
-  {
-    name: "Smart Watch",
-    sold: 110,
-  },
-  {
-    name: "Bluetooth Speaker",
-    sold: 95,
-  },
-  {
-    name: "Gaming Mouse",
-    sold: 72,
-  },
-];
+type Order = {
+  _id: string;
+  customer: { fullName: string };
+  totalAmount: number;
+  orderStatus: string;
+  createdAt: string;
+  items: { name: string; quantity: number }[];
+};
 
 export default function AdminDashboard() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [productCount, setProductCount] = useState(0);
+  const [customerCount, setCustomerCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([getAllOrders(), getProducts(), getAllUsers()])
+      .then(([orderData, productData, userData]) => {
+        setOrders(orderData.orders ?? []);
+        setProductCount(productData.products?.length ?? 0);
+        setCustomerCount(userData.users?.length ?? 0);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const totalRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);
+
+  const stats = [
+    {
+      title: "Total Revenue",
+      value: `₹${totalRevenue.toLocaleString()}`,
+      icon: IndianRupee,
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      title: "Orders",
+      value: orders.length.toString(),
+      icon: ShoppingCart,
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      title: "Products",
+      value: productCount.toString(),
+      icon: Package,
+      color: "bg-orange-100 text-orange-600",
+    },
+    {
+      title: "Customers",
+      value: customerCount.toString(),
+      icon: Users,
+      color: "bg-purple-100 text-purple-600",
+    },
+  ];
+
+  const productSales = new Map<string, number>();
+  orders.forEach((order) => {
+    order.items?.forEach((item) => {
+      productSales.set(
+        item.name,
+        (productSales.get(item.name) ?? 0) + item.quantity
+      );
+    });
+  });
+
+  const topProducts = Array.from(productSales.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
+
+  const recentOrders = orders.slice(0, 5);
+
   return (
     <div className="space-y-8">
 
@@ -104,9 +100,12 @@ export default function AdminDashboard() {
 
         </div>
 
-        <button className="bg-orange-500 hover:bg-orange-600 transition px-5 py-3 rounded-xl text-white font-semibold shadow">
+        <Link
+          href="/admin/products"
+          className="bg-orange-500 hover:bg-orange-600 transition px-5 py-3 rounded-xl text-white font-semibold shadow"
+        >
           + Add Product
-        </button>
+        </Link>
 
       </div>
 
@@ -128,16 +127,8 @@ export default function AdminDashboard() {
                 </p>
 
                 <h2 className="text-3xl font-bold mt-3">
-                  {item.value}
+                  {loading ? "…" : item.value}
                 </h2>
-
-                <div className="flex items-center gap-1 mt-4 text-green-600">
-
-                  <TrendingUp size={18} />
-
-                  {item.change}
-
-                </div>
 
               </div>
 
@@ -157,64 +148,36 @@ export default function AdminDashboard() {
 
       <div className="grid xl:grid-cols-3 gap-6">
 
-        <div className="xl:col-span-2 bg-white rounded-2xl shadow p-6">
-
-          <div className="flex justify-between">
-
-            <h2 className="text-xl font-semibold">
-              Revenue Overview
-            </h2>
-
-            <span className="text-green-600 font-semibold flex items-center gap-2">
-
-              <TrendingUp size={18} />
-
-              +24%
-
-            </span>
-
-          </div>
-
-          <div className="h-72 flex items-center justify-center text-gray-400 text-lg">
-            📈 Sales Chart (Recharts will be added next)
-          </div>
-
-        </div>
-
-        <div className="bg-white rounded-2xl shadow p-6">
+        <div className="bg-white rounded-2xl shadow p-6 xl:col-span-3">
 
           <h2 className="text-xl font-semibold mb-5">
-            Top Products
+            Top Selling Products
           </h2>
 
           <div className="space-y-5">
 
-            {topProducts.map((product) => (
+            {topProducts.length === 0 ? (
+              <p className="text-gray-400">No sales data yet.</p>
+            ) : (
+              topProducts.map(([name, sold]) => (
 
-              <div
-                key={product.name}
-                className="flex justify-between items-center"
-              >
-
-                <div>
+                <div
+                  key={name}
+                  className="flex justify-between items-center"
+                >
 
                   <p className="font-medium">
-                    {product.name}
+                    {name}
                   </p>
 
-                  <span className="text-sm text-gray-500">
-                    {product.sold} Sold
+                  <span className="font-bold text-orange-500">
+                    {sold} Sold
                   </span>
 
                 </div>
 
-                <span className="font-bold text-orange-500">
-                  #{product.sold}
-                </span>
-
-              </div>
-
-            ))}
+              ))
+            )}
 
           </div>
 
@@ -251,44 +214,52 @@ export default function AdminDashboard() {
 
           <tbody>
 
-            {recentOrders.map((order) => (
-
-              <tr
-                key={order.id}
-                className="border-b hover:bg-slate-50"
-              >
-
-                <td className="p-4 font-semibold">
-                  {order.id}
+            {recentOrders.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="p-8 text-center text-gray-500">
+                  {loading ? "Loading orders..." : "No orders yet."}
                 </td>
-
-                <td>{order.customer}</td>
-
-                <td>{order.amount}</td>
-
-                <td>
-
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm
-
-                    ${
-                      order.status === "Delivered"
-                        ? "bg-green-100 text-green-600"
-                        : order.status === "Cancelled"
-                        ? "bg-red-100 text-red-600"
-                        : order.status === "Processing"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-blue-100 text-blue-700"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-
-                </td>
-
               </tr>
+            ) : (
+              recentOrders.map((order) => (
 
-            ))}
+                <tr
+                  key={order._id}
+                  className="border-b hover:bg-slate-50"
+                >
+
+                  <td className="p-4 font-semibold">
+                    KM{order._id.slice(-8).toUpperCase()}
+                  </td>
+
+                  <td>{order.customer?.fullName}</td>
+
+                  <td>₹{order.totalAmount.toLocaleString()}</td>
+
+                  <td>
+
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm
+
+                      ${
+                        order.orderStatus === "Delivered"
+                          ? "bg-green-100 text-green-600"
+                          : order.orderStatus === "Cancelled"
+                          ? "bg-red-100 text-red-600"
+                          : order.orderStatus === "Processing"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-blue-100 text-blue-700"
+                      }`}
+                    >
+                      {order.orderStatus}
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              ))
+            )}
 
           </tbody>
 

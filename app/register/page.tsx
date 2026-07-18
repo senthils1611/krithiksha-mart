@@ -4,12 +4,13 @@ import Link from "next/link";
 import { User, Mail, Lock, UserPlus, Phone } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { toast } from "sonner";
-import Error from "next/error";
+import { register as registerApi } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -50,17 +51,18 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      await axios.post("http://localhost:5001/api/auth/register", {
-        fullName: formData.name,
+      const data = await registerApi({
+        name: formData.name,
         phone: formData.phone,
         email: formData.email,
         password: formData.password,
       });
-      toast.success("Registration Successful! Please login to continue.");
-      router.push("/login");
-    } catch (error: any) {
-      console.log('error.response',error);
 
+      login(data.token, data.user);
+
+      toast.success("Registration Successful!");
+      router.push("/");
+    } catch (error: any) {
       toast.error(
         error.response?.data?.message ||
         "Registration Failed"

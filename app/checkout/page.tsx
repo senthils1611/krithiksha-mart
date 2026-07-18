@@ -1,12 +1,17 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
-import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { createOrder } from "@/lib/api";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CheckoutPage() {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const [placing, setPlacing] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -17,6 +22,24 @@ export default function CheckoutPage() {
     pincode: "",
     notes: "",
   });
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      toast.error("Please login to continue checkout");
+      router.push("/login");
+    }
+  }, [authLoading, user, router]);
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: user.name ?? prev.fullName,
+        email: user.email ?? prev.email,
+        phone: user.phone ?? prev.phone,
+      }));
+    }
+  }, [user]);
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -32,8 +55,46 @@ export default function CheckoutPage() {
     });
   };
 
-  const handlePlaceOrder = () => {
-    router.push("/order-success");
+  const handlePlaceOrder = async () => {
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.address ||
+      !formData.city ||
+      !formData.pincode
+    ) {
+      return toast.error("Please fill all required delivery details");
+    }
+
+    if (cart.length === 0) {
+      return toast.error("Your cart is empty");
+    }
+
+    try {
+      setPlacing(true);
+
+      const data = await createOrder({
+        customer: formData,
+        items: cart.map((item) => ({
+          productId: item._id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.images?.[0] ?? "",
+        })),
+        totalAmount: total,
+      });
+
+      clearCart();
+      router.push(`/order-success?orderId=${data.order._id}`);
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message || "Failed to place order"
+      );
+    } finally {
+      setPlacing(false);
+    }
   };
 
 
@@ -224,9 +285,10 @@ export default function CheckoutPage() {
 
               <button
                 onClick={handlePlaceOrder}
-                className="w-full mt-8 h-14 rounded-2xl bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white text-lg font-bold shadow-lg hover:scale-105 transition duration-300"
+                disabled={placing}
+                className="w-full mt-8 h-14 rounded-2xl bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white text-lg font-bold shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
               >
-                Place Order
+                {placing ? "Placing Order..." : "Place Order"}
               </button>
 
               <div className="mt-8 rounded-2xl bg-green-50 border border-green-200 p-4">

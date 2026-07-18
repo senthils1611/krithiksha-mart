@@ -1,66 +1,43 @@
 "use client";
 
-import {
-  Plus,
-  Search,
-  Pencil,
-  Trash2,
-  Grid2X2,
-  Package,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, Grid2X2, Package } from "lucide-react";
+import { toast } from "sonner";
+import { getProducts } from "@/lib/api";
 
-const categories = [
-  {
-    id: 1,
-    name: "Electronics",
-    description: "Mobile, Laptop & Gadgets",
-    products: 125,
-    status: "Active",
-    color: "bg-blue-500",
-  },
-  {
-    id: 2,
-    name: "Fashion",
-    description: "Men & Women Clothing",
-    products: 84,
-    status: "Active",
-    color: "bg-pink-500",
-  },
-  {
-    id: 3,
-    name: "Home Appliances",
-    description: "Kitchen & Home",
-    products: 63,
-    status: "Active",
-    color: "bg-orange-500",
-  },
-  {
-    id: 4,
-    name: "Beauty",
-    description: "Cosmetics & Personal Care",
-    products: 42,
-    status: "Inactive",
-    color: "bg-purple-500",
-  },
-  {
-    id: 5,
-    name: "Sports",
-    description: "Fitness & Outdoor",
-    products: 37,
-    status: "Active",
-    color: "bg-green-500",
-  },
-  {
-    id: 6,
-    name: "Books",
-    description: "Educational & Story Books",
-    products: 56,
-    status: "Active",
-    color: "bg-yellow-500",
-  },
+const COLORS = [
+  "bg-blue-500",
+  "bg-pink-500",
+  "bg-orange-500",
+  "bg-purple-500",
+  "bg-green-500",
+  "bg-yellow-500",
 ];
 
 export default function CategoriesPage() {
+  const [categories, setCategories] = useState<{ name: string; count: number }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    getProducts()
+      .then((data) => {
+        const counts = new Map<string, number>();
+        (data.products ?? []).forEach((p: { category: string }) => {
+          counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+        });
+        setCategories(
+          Array.from(counts.entries()).map(([name, count]) => ({ name, count }))
+        );
+      })
+      .catch(() => toast.error("Failed to load categories"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = categories.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="space-y-8">
 
@@ -75,18 +52,10 @@ export default function CategoriesPage() {
           </h1>
 
           <p className="text-slate-500 mt-2">
-            Organize your products into categories.
+            Categories are derived from your product listings.
           </p>
 
         </div>
-
-        <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow">
-
-          <Plus size={18} />
-
-          Add Category
-
-        </button>
 
       </div>
 
@@ -103,6 +72,8 @@ export default function CategoriesPage() {
 
           <input
             type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search categories..."
             className="w-full border rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
@@ -113,80 +84,56 @@ export default function CategoriesPage() {
 
       {/* Cards */}
 
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+      {loading ? (
+        <div className="bg-white rounded-2xl shadow p-14 text-center text-gray-500">
+          Loading categories...
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="bg-white rounded-2xl shadow p-14 text-center text-gray-500">
+          No categories yet. Add products with a category to see them here.
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-        {categories.map((category) => (
+          {filtered.map((category, i) => (
 
-          <div
-            key={category.id}
-            className="bg-white rounded-2xl shadow hover:shadow-xl transition-all duration-300 overflow-hidden"
-          >
+            <div
+              key={category.name}
+              className="bg-white rounded-2xl shadow hover:shadow-xl transition-all duration-300 overflow-hidden"
+            >
 
-            <div className={`${category.color} h-3`} />
+              <div className={`${COLORS[i % COLORS.length]} h-3`} />
 
-            <div className="p-6">
-
-              <div className="flex justify-between items-start">
+              <div className="p-6">
 
                 <div
-                  className={`w-14 h-14 rounded-xl ${category.color} text-white flex items-center justify-center`}
+                  className={`w-14 h-14 rounded-xl ${COLORS[i % COLORS.length]} text-white flex items-center justify-center`}
                 >
                   <Grid2X2 size={28} />
                 </div>
 
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    category.status === "Active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {category.status}
-                </span>
+                <h2 className="text-xl font-bold mt-5">
+                  {category.name}
+                </h2>
 
-              </div>
+                <div className="flex items-center gap-2 mt-5 text-orange-500">
 
-              <h2 className="text-xl font-bold mt-5">
-                {category.name}
-              </h2>
+                  <Package size={18} />
 
-              <p className="text-gray-500 mt-2">
-                {category.description}
-              </p>
+                  <span className="font-semibold">
+                    {category.count} Products
+                  </span>
 
-              <div className="flex items-center gap-2 mt-5 text-orange-500">
-
-                <Package size={18} />
-
-                <span className="font-semibold">
-                  {category.products} Products
-                </span>
-
-              </div>
-
-              <div className="flex justify-end gap-3 mt-6">
-
-                <button className="w-10 h-10 rounded-lg bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center">
-
-                  <Pencil size={18} />
-
-                </button>
-
-                <button className="w-10 h-10 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center">
-
-                  <Trash2 size={18} />
-
-                </button>
+                </div>
 
               </div>
 
             </div>
 
-          </div>
+          ))}
 
-        ))}
-
-      </div>
+        </div>
+      )}
 
     </div>
   );

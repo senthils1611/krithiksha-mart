@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 
-import { Product } from "@/types";
+import { Product } from "@/types/product";
 
 interface WishlistContextType {
   wishlist: Product[];

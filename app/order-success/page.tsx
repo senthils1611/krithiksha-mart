@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   CheckCircle2,
   ShoppingBag,
@@ -7,11 +11,19 @@ import {
 } from "lucide-react";
 
 export default function OrderSuccessPage() {
-  const orderId =
-    "KM" +
-    Math.floor(Math.random() * 1000000)
-      .toString()
-      .padStart(6, "0");
+  return (
+    <Suspense fallback={null}>
+      <OrderSuccessContent />
+    </Suspense>
+  );
+}
+
+function OrderSuccessContent() {
+  const searchParams = useSearchParams();
+  const rawOrderId = searchParams.get("orderId");
+  const orderId = rawOrderId
+    ? "KM" + rawOrderId.slice(-8).toUpperCase()
+    : "N/A";
 
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 5);
