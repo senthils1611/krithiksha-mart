@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -15,7 +15,8 @@ import {
   X,
   LogOut,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AdminLayout({
   children,
@@ -23,7 +24,27 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user) {
+      router.push("/login");
+    } else if (user.role !== "admin") {
+      router.push("/");
+    }
+  }, [loading, user, router]);
+
+  if (loading || !user || user.role !== "admin") {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Checking access...
+      </div>
+    );
+  }
 
   const menus = [
     {
@@ -133,7 +154,10 @@ export default function AdminLayout({
 
         <div className="absolute bottom-0 left-0 w-full p-5 border-t border-slate-700">
 
-          <button className="flex items-center gap-3 text-red-400 hover:text-red-300">
+          <button
+            onClick={logout}
+            className="flex items-center gap-3 text-red-400 hover:text-red-300"
+          >
 
             <LogOut size={20} />
 
@@ -202,7 +226,7 @@ export default function AdminLayout({
               <div className="hidden md:block">
 
                 <h4 className="font-semibold">
-                  Admin
+                  {user.name}
                 </h4>
 
                 <p className="text-xs text-gray-500">

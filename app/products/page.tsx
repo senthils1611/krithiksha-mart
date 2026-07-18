@@ -6,16 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
 import { SlidersHorizontal, ChevronRight } from "lucide-react";
 import { getProducts } from "@/lib/api";
-
-type Product = {
-  _id: string;
-  name: string;
-  description: string;
-  category: string;
-  price: number;
-  stock: number;
-  images: string[];
-};
+import { Product } from "@/types/product";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { toast } from "sonner";
 import {
   Mail,
@@ -12,10 +11,13 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { login as loginApi } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
 
 const [loading, setLoading] = useState(false);
 
@@ -42,23 +44,14 @@ const handleLogin = async () => {
   try {
     setLoading(true);
 
-    const res = await axios.post(
-      "http://localhost:5001/api/auth/login",
-      formData
-    );
+    const data = await loginApi(formData.email, formData.password);
 
-    localStorage.setItem("token", res.data.token);
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify(res.data.user)
-    );
+    login(data.token, data.user);
 
     toast.success("Login Successful");
 
     router.push("/");
   } catch (error: any) {
-    console.log('error.response', error);
     toast.error(
       error.response?.data?.message ||
       "Login Failed"

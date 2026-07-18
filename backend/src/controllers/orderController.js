@@ -2,7 +2,10 @@ const Order = require("../models/Order");
 
 exports.createOrder = async (req, res) => {
   try {
-    const order = await Order.create(req.body);
+    const order = await Order.create({
+      ...req.body,
+      user: req.user._id,
+    });
 
     res.status(201).json({
       success: true,
@@ -17,9 +20,11 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.getOrders = async (req, res) => {
+exports.getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: -1 });
+    const orders = await Order.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
@@ -34,33 +39,10 @@ exports.getOrders = async (req, res) => {
   }
 };
 
-exports.getOrderById = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      order,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("products.product")
+      .populate("user", "name email")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -79,13 +61,23 @@ exports.getAllOrders = async (req, res) => {
 exports.getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
-      "products.product"
+      "user",
+      "name email"
     );
 
     if (!order) {
       return res.status(404).json({
         success: false,
         message: "Order not found",
+      });
+    }
+
+    const isOwner = order.user && order.user._id.equals(req.user._id);
+
+    if (!isOwner && req.user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view this order",
       });
     }
 
@@ -105,12 +97,8 @@ exports.updateOrderStatus = async (req, res) => {
   try {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
-      {
-        status: req.body.status,
-      },
-      {
-        new: true,
-      }
+      { orderStatus: req.body.orderStatus },
+      { new: true, runValidators: true }
     );
 
     if (!order) {
@@ -132,7 +120,6 @@ exports.updateOrderStatus = async (req, res) => {
     });
   }
 };
-
 
 exports.deleteOrder = async (req, res) => {
   try {

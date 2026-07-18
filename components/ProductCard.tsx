@@ -5,16 +5,7 @@ import { Heart, ShoppingCart, Star, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 import { useState } from "react";
-
-type Product = {
-  _id: string;
-  name: string;
-  price: number;
-  images: string[];
-  description: string;
-  category: string;
-  stock: number;
-};
+import { Product } from "@/types/product";
 
 type Props = {
   product: Product;

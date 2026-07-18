@@ -1,54 +1,122 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { Search, Plus, Pencil, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import {
-  Search,
-  Plus,
-  Pencil,
-  Trash2,
-  Eye,
-  Filter,
-} from "lucide-react";
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "@/lib/api";
+import { Product } from "@/types/product";
 
-const products = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    category: "Electronics",
-    price: "₹2,499",
-    stock: 42,
-    status: "Active",
-    image: "https://picsum.photos/80?1",
-  },
-  {
-    id: 2,
-    name: "Smart Watch",
-    category: "Wearables",
-    price: "₹3,999",
-    stock: 8,
-    status: "Low Stock",
-    image: "https://picsum.photos/80?2",
-  },
-  {
-    id: 3,
-    name: "Bluetooth Speaker",
-    category: "Audio",
-    price: "₹1,699",
-    stock: 0,
-    status: "Out of Stock",
-    image: "https://picsum.photos/80?3",
-  },
-  {
-    id: 4,
-    name: "Gaming Mouse",
-    category: "Accessories",
-    price: "₹1,299",
-    stock: 55,
-    status: "Active",
-    image: "https://picsum.photos/80?4",
-  },
-];
+const emptyForm = {
+  name: "",
+  description: "",
+  price: "",
+  category: "",
+  brand: "",
+  stock: "",
+  images: "",
+  isFeatured: false,
+};
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState<Product | null>(null);
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
+
+  const loadProducts = () => {
+    setLoading(true);
+    getProducts()
+      .then((data) => setProducts(data.products ?? []))
+      .catch(() => toast.error("Failed to load products"))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const openAdd = () => {
+    setEditing(null);
+    setForm(emptyForm);
+    setModalOpen(true);
+  };
+
+  const openEdit = (product: Product) => {
+    setEditing(product);
+    setForm({
+      name: product.name,
+      description: product.description,
+      price: String(product.price),
+      category: product.category,
+      brand: product.brand ?? "",
+      stock: String(product.stock ?? 0),
+      images: (product.images ?? []).join(", "),
+      isFeatured: !!product.isFeatured,
+    });
+    setModalOpen(true);
+  };
+
+  const handleSave = async () => {
+    if (!form.name || !form.price || !form.category || !form.description) {
+      return toast.error("Name, description, category and price are required");
+    }
+
+    const payload = {
+      name: form.name,
+      description: form.description,
+      price: Number(form.price),
+      category: form.category,
+      brand: form.brand,
+      stock: Number(form.stock) || 0,
+      images: form.images
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      isFeatured: form.isFeatured,
+    };
+
+    try {
+      setSaving(true);
+      if (editing) {
+        await updateProduct(editing._id, payload);
+        toast.success("Product updated");
+      } else {
+        await createProduct(payload);
+        toast.success("Product added");
+      }
+      setModalOpen(false);
+      loadProducts();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to save product");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (product: Product) => {
+    if (!confirm(`Delete "${product.name}"?`)) return;
+
+    try {
+      await deleteProduct(product._id);
+      toast.success("Product deleted");
+      setProducts((prev) => prev.filter((p) => p._id !== product._id));
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to delete product");
+    }
+  };
+
+  const filtered = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="space-y-8">
 
@@ -66,7 +134,10 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow">
+        <button
+          onClick={openAdd}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow"
+        >
           <Plus size={18} />
           Add Product
         </button>
@@ -77,39 +148,20 @@ export default function ProductsPage() {
 
       <div className="bg-white rounded-2xl shadow p-5">
 
-        <div className="flex flex-col lg:flex-row gap-4">
+        <div className="relative">
 
-          <div className="flex-1 relative">
+          <Search
+            className="absolute left-4 top-3.5 text-gray-400"
+            size={18}
+          />
 
-            <Search
-              className="absolute left-4 top-3.5 text-gray-400"
-              size={18}
-            />
-
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="w-full border rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
-            />
-
-          </div>
-
-          <select className="border rounded-xl px-5 py-3">
-
-            <option>All Categories</option>
-            <option>Electronics</option>
-            <option>Accessories</option>
-            <option>Wearables</option>
-
-          </select>
-
-          <button className="border rounded-xl px-5 py-3 flex items-center gap-2 hover:bg-slate-100">
-
-            <Filter size={18} />
-
-            Filter
-
-          </button>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search products..."
+            className="w-full border rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+          />
 
         </div>
 
@@ -138,124 +190,216 @@ export default function ProductsPage() {
 
           <tbody>
 
-            {products.map((product) => (
-
-              <tr
-                key={product.id}
-                className="border-b hover:bg-slate-50"
-              >
-
-                <td className="p-4">
-
-                  <div className="flex items-center gap-4">
-
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-16 h-16 rounded-xl object-cover"
-                    />
-
-                    <div>
-
-                      <h3 className="font-semibold">
-                        {product.name}
-                      </h3>
-
-                      <p className="text-sm text-gray-500">
-                        Product ID #{product.id}
-                      </p>
-
-                    </div>
-
-                  </div>
-
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="p-8 text-center text-gray-500">
+                  Loading products...
                 </td>
-
-                <td>{product.category}</td>
-
-                <td className="font-semibold">
-                  {product.price}
-                </td>
-
-                <td>{product.stock}</td>
-
-                <td>
-
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium
-
-                    ${
-                      product.status === "Active"
-                        ? "bg-green-100 text-green-700"
-                        : product.status === "Low Stock"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {product.status}
-                  </span>
-
-                </td>
-
-                <td>
-
-                  <div className="flex justify-center gap-3">
-
-                    <button className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200">
-                      <Eye size={18} />
-                    </button>
-
-                    <button className="p-2 rounded-lg bg-green-100 text-green-600 hover:bg-green-200">
-                      <Pencil size={18} />
-                    </button>
-
-                    <button className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200">
-                      <Trash2 size={18} />
-                    </button>
-
-                  </div>
-
-                </td>
-
               </tr>
+            ) : filtered.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="p-8 text-center text-gray-500">
+                  No products found.
+                </td>
+              </tr>
+            ) : (
+              filtered.map((product) => {
+                const status =
+                  product.stock === 0
+                    ? "Out of Stock"
+                    : product.stock < 10
+                    ? "Low Stock"
+                    : "Active";
 
-            ))}
+                return (
+                  <tr
+                    key={product._id}
+                    className="border-b hover:bg-slate-50"
+                  >
+
+                    <td className="p-4">
+
+                      <div className="flex items-center gap-4">
+
+                        <img
+                          src={product.images?.[0] || "https://picsum.photos/80"}
+                          alt={product.name}
+                          className="w-16 h-16 rounded-xl object-cover"
+                        />
+
+                        <div>
+
+                          <h3 className="font-semibold">
+                            {product.name}
+                          </h3>
+
+                          <p className="text-sm text-gray-500">
+                            ID #{product._id.slice(-6)}
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </td>
+
+                    <td>{product.category}</td>
+
+                    <td className="font-semibold">
+                      ₹{product.price.toLocaleString()}
+                    </td>
+
+                    <td>{product.stock}</td>
+
+                    <td>
+
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium
+                        ${
+                          status === "Active"
+                            ? "bg-green-100 text-green-700"
+                            : status === "Low Stock"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {status}
+                      </span>
+
+                    </td>
+
+                    <td>
+
+                      <div className="flex justify-center gap-3">
+
+                        <button
+                          onClick={() => openEdit(product)}
+                          className="p-2 rounded-lg bg-green-100 text-green-600 hover:bg-green-200"
+                        >
+                          <Pencil size={18} />
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(product)}
+                          className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+                );
+              })
+            )}
 
           </tbody>
 
         </table>
 
-        {/* Pagination */}
+      </div>
 
-        <div className="flex justify-between items-center p-5 border-t">
+      {/* Add / Edit Modal */}
 
-          <p className="text-gray-500">
-            Showing 1–4 of 325 Products
-          </p>
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
 
-          <div className="flex gap-2">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">
+                {editing ? "Edit Product" : "Add Product"}
+              </h2>
+              <button onClick={() => setModalOpen(false)}>
+                <X />
+              </button>
+            </div>
 
-            <button className="border px-4 py-2 rounded-lg hover:bg-slate-100">
-              Previous
-            </button>
+            <div className="space-y-4">
+              <input
+                placeholder="Name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+              />
 
-            <button className="bg-orange-500 text-white px-4 py-2 rounded-lg">
-              1
-            </button>
+              <textarea
+                placeholder="Description"
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+                rows={3}
+                className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+              />
 
-            <button className="border px-4 py-2 rounded-lg hover:bg-slate-100">
-              2
-            </button>
+              <div className="grid grid-cols-2 gap-4">
+                <input
+                  type="number"
+                  placeholder="Price"
+                  value={form.price}
+                  onChange={(e) => setForm({ ...form, price: e.target.value })}
+                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                />
 
-            <button className="border px-4 py-2 rounded-lg hover:bg-slate-100">
-              Next
-            </button>
+                <input
+                  type="number"
+                  placeholder="Stock"
+                  value={form.stock}
+                  onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <input
+                  placeholder="Category"
+                  value={form.category}
+                  onChange={(e) =>
+                    setForm({ ...form, category: e.target.value })
+                  }
+                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                />
+
+                <input
+                  placeholder="Brand"
+                  value={form.brand}
+                  onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
+
+              <input
+                placeholder="Image URLs (comma separated)"
+                value={form.images}
+                onChange={(e) => setForm({ ...form, images: e.target.value })}
+                className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+              />
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={form.isFeatured}
+                  onChange={(e) =>
+                    setForm({ ...form, isFeatured: e.target.checked })
+                  }
+                />
+                Featured Product
+              </label>
+
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold disabled:opacity-60"
+              >
+                {saving ? "Saving..." : editing ? "Update Product" : "Add Product"}
+              </button>
+            </div>
 
           </div>
-
         </div>
-
-      </div>
+      )}
 
     </div>
   );
