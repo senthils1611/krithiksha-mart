@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const API_URL = "http://localhost:5001/api";
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001/api";
 
 function authHeaders() {
   if (typeof window === "undefined") return {};
@@ -90,6 +91,61 @@ export async function updateMe(data: Record<string, unknown>) {
 
 export async function getAllUsers() {
   const res = await axios.get(`${API_URL}/users`, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+// ---------- Wishlist ----------
+
+export async function getWishlist() {
+  const res = await axios.get(`${API_URL}/users/wishlist`, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+export async function addToWishlistApi(productId: string) {
+  const res = await axios.post(
+    `${API_URL}/users/wishlist/${productId}`,
+    {},
+    { headers: authHeaders() }
+  );
+  return res.data;
+}
+
+export async function removeFromWishlistApi(productId: string) {
+  const res = await axios.delete(`${API_URL}/users/wishlist/${productId}`, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+// ---------- Addresses ----------
+
+export async function getAddresses() {
+  const res = await axios.get(`${API_URL}/users/addresses`, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+export async function addAddress(data: Record<string, unknown>) {
+  const res = await axios.post(`${API_URL}/users/addresses`, data, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+export async function updateAddress(id: string, data: Record<string, unknown>) {
+  const res = await axios.put(`${API_URL}/users/addresses/${id}`, data, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+export async function deleteAddress(id: string) {
+  const res = await axios.delete(`${API_URL}/users/addresses/${id}`, {
     headers: authHeaders(),
   });
   return res.data;

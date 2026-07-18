@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Star, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 import { getProductById } from "@/lib/api";
 import AddToCartButton from "@/components/AddToCartButton";
+import WishlistButton from "@/components/WishlistButton";
 
 type Props = {
   params: {
@@ -157,6 +158,8 @@ export default async function ProductDetails({ params }: Props) {
                 <AddToCartButton product={product} />
 
               </div>
+
+              <WishlistButton product={product} />
 
               <button className="flex-1 rounded-xl bg-highlight text-highlight-foreground py-4 font-semibold hover:opacity-90 transition">
                 Buy Now

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { Heart, ShoppingCart, Star, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { toast } from "sonner";
-import { useState } from "react";
 import { Product } from "@/types/product";
 
 type Props = {
@@ -13,11 +13,22 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
   const { addToCart } = useCart();
-  const [wishlist, setWishlist] = useState(false);
+  const { isWishlisted, addToWishlist, removeFromWishlist } = useWishlist();
+  const wishlisted = isWishlisted(product._id);
 
   const handleAddToCart = () => {
     addToCart(product);
     toast.success(`${product.name} added to cart`);
+  };
+
+  const handleToggleWishlist = () => {
+    if (wishlisted) {
+      removeFromWishlist(product._id);
+      toast.success(`${product.name} removed from wishlist`);
+    } else {
+      addToWishlist(product);
+      toast.success(`${product.name} added to wishlist`);
+    }
   };
 
   const originalPrice = Math.round(product.price * 1.2);
@@ -44,13 +55,13 @@ export default function ProductCard({ product }: Props) {
         {/* Wishlist */}
 
         <button
-          onClick={() => setWishlist(!wishlist)}
+          onClick={handleToggleWishlist}
           className="absolute right-4 top-4 bg-surface p-2 rounded-full shadow hover:scale-110 transition"
         >
           <Heart
             size={18}
             className={
-              wishlist ? "fill-highlight text-highlight" : "text-muted-foreground"
+              wishlisted ? "fill-highlight text-highlight" : "text-muted-foreground"
             }
           />
         </button>

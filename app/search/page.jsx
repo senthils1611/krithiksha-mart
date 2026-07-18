@@ -1,28 +1,53 @@
 "use client";
 
-import Link from "next/link";
-import { Search, Star, ShoppingCart } from "lucide-react";
-
-const products = [
-  {
-    id: 1,
-    name: "Apple iPhone 16 Pro",
-    category: "Smartphone",
-    price: 129999,
-    rating: 4.9,
-    image: "/products/default.jpg",
-  },
-  {
-    id: 2,
-    name: "Sony WH-1000XM5",
-    category: "Headphones",
-    price: 29999,
-    rating: 4.8,
-    image: "/products/default.jpg",
-  },
-];
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Search } from "lucide-react";
+import ProductCard from "@/components/ProductCard";
+import { getProducts } from "@/lib/api";
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={null}>
+      <SearchContent />
+    </Suspense>
+  );
+}
+
+function SearchContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") ?? "";
+
+  const [query, setQuery] = useState(initialQuery);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  useEffect(() => {
+    getProducts()
+      .then((data) => setProducts(data.products ?? []))
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const results = useMemo(() => {
+    if (!initialQuery) return products;
+
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(initialQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(initialQuery.toLowerCase())
+    );
+  }, [products, initialQuery]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 py-12">
 
@@ -36,19 +61,21 @@ export default function SearchPage() {
             KRITHIKSHA MART
           </p>
 
-          <h1 className="text-5xl font-extrabold mt-2">
+          <h1 className="text-5xl font-extrabold mt-2 text-foreground">
             Search Results
           </h1>
 
           <p className="text-muted-foreground mt-2">
-            Showing products matching your search.
+            {initialQuery
+              ? `Showing results for "${initialQuery}"`
+              : "Showing all products."}
           </p>
 
         </div>
 
         {/* Search */}
 
-        <div className="relative mb-10">
+        <form onSubmit={handleSubmit} className="relative mb-10">
 
           <Search
             className="absolute left-5 top-4 text-muted-foreground"
@@ -56,80 +83,44 @@ export default function SearchPage() {
           />
 
           <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search products..."
-            className="w-full h-14 rounded-2xl border-2 border-border pl-14 pr-5 outline-none focus:border-primary"
+            className="w-full h-14 rounded-2xl border-2 border-border bg-surface text-foreground placeholder:text-muted-foreground pl-14 pr-5 outline-none focus:border-primary"
           />
 
-        </div>
+        </form>
 
         {/* Products */}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {loading ? (
 
-          {products.map((item) => (
+          <div className="bg-surface border border-border rounded-3xl shadow-xl p-16 text-center text-muted-foreground">
+            Loading products...
+          </div>
 
-            <div
-              key={item.id}
-              className="bg-surface rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition"
-            >
+        ) : results.length === 0 ? (
 
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-56 object-cover"
-              />
+          <div className="bg-surface border border-border rounded-3xl shadow-xl p-16 text-center">
+            <h2 className="text-3xl font-bold text-foreground">
+              No Products Found
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Try a different search term.
+            </p>
+          </div>
 
-              <div className="p-6">
+        ) : (
 
-                <span className="text-sm text-primary font-semibold">
-                  {item.category}
-                </span>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-                <h2 className="text-xl font-bold mt-2">
-                  {item.name}
-                </h2>
+            {results.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
 
-                <div className="flex items-center gap-2 mt-3">
+          </div>
 
-                  <Star
-                    className="fill-accent text-accent"
-                    size={18}
-                  />
-
-                  {item.rating}
-
-                </div>
-
-                <p className="text-3xl font-bold text-primary mt-4">
-                  ₹{item.price.toLocaleString()}
-                </p>
-
-                <div className="flex gap-3 mt-6">
-
-                  <Link
-                    href={`/products/${item.id}`}
-                    className="flex-1 text-center border border-primary text-primary py-3 rounded-xl font-semibold hover:bg-primary/10"
-                  >
-                    View
-                  </Link>
-
-                  <button className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-highlight text-white py-3 rounded-xl font-semibold">
-
-                    <ShoppingCart size={18} />
-
-                    Cart
-
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
+        )}
 
       </div>
 
