@@ -5,6 +5,7 @@ import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "sonner";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,15 +30,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body>
-        <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>{children}</WishlistProvider>
-          </CartProvider>
-        </AuthProvider>
-        <Toaster richColors position="top-right" />
+        <ThemeProvider>
+          <AuthProvider>
+            <CartProvider>
+              <WishlistProvider>{children}</WishlistProvider>
+            </CartProvider>
+          </AuthProvider>
+          <Toaster richColors position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

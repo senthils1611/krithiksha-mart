@@ -39,11 +39,11 @@ export default function CustomersPage() {
       <div className="flex flex-col lg:flex-row justify-between gap-5">
 
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">
+          <h1 className="text-3xl font-bold text-foreground">
             Customers
           </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p className="text-muted-foreground mt-2">
             All registered accounts on the store
           </p>
         </div>
@@ -51,20 +51,20 @@ export default function CustomersPage() {
       </div>
 
       {/* Search */}
-      <div className="bg-white rounded-2xl shadow p-5">
+      <div className="bg-surface rounded-2xl shadow p-5">
 
         <div className="relative">
 
           <Search
             size={18}
-            className="absolute left-4 top-4 text-gray-400"
+            className="absolute left-4 top-4 text-muted-foreground"
           />
 
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search customer by name or email..."
-            className="w-full border rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full border border-border bg-background text-foreground rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary"
           />
 
         </div>
@@ -72,11 +72,11 @@ export default function CustomersPage() {
       </div>
 
       {/* Customer Table */}
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+      <div className="bg-surface rounded-2xl shadow overflow-hidden">
 
         <table className="w-full">
 
-          <thead className="bg-slate-100">
+          <thead className="bg-surface-muted">
 
             <tr>
 
@@ -93,13 +93,13 @@ export default function CustomersPage() {
 
             {loading ? (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-gray-500">
+                <td colSpan={4} className="p-8 text-center text-muted-foreground">
                   Loading customers...
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-gray-500">
+                <td colSpan={4} className="p-8 text-center text-muted-foreground">
                   No customers found.
                 </td>
               </tr>
@@ -108,7 +108,7 @@ export default function CustomersPage() {
 
                 <tr
                   key={customer._id}
-                  className="border-b hover:bg-slate-50"
+                  className="border-b border-border hover:bg-surface-muted"
                 >
 
                   <td className="p-4">
@@ -127,7 +127,7 @@ export default function CustomersPage() {
                           {customer.name}
                         </h3>
 
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           ID #{customer._id.slice(-6)}
                         </p>
 
@@ -169,8 +169,8 @@ export default function CustomersPage() {
                       className={`px-3 py-1 rounded-full text-sm font-medium capitalize
                       ${
                         customer.role === "admin"
-                          ? "bg-purple-100 text-purple-700"
-                          : "bg-green-100 text-green-700"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-success/10 text-success"
                       }`}
                     >
                       {customer.role}

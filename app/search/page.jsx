@@ -24,7 +24,7 @@ const products = [
 
 export default function SearchPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-orange-50 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 py-12">
 
       <div className="max-w-7xl mx-auto px-6">
 
@@ -32,7 +32,7 @@ export default function SearchPage() {
 
         <div className="mb-10">
 
-          <p className="uppercase tracking-[4px] text-orange-500 font-semibold">
+          <p className="uppercase tracking-[4px] text-primary font-semibold">
             KRITHIKSHA MART
           </p>
 
@@ -40,7 +40,7 @@ export default function SearchPage() {
             Search Results
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-muted-foreground mt-2">
             Showing products matching your search.
           </p>
 
@@ -51,13 +51,13 @@ export default function SearchPage() {
         <div className="relative mb-10">
 
           <Search
-            className="absolute left-5 top-4 text-gray-400"
+            className="absolute left-5 top-4 text-muted-foreground"
             size={22}
           />
 
           <input
             placeholder="Search products..."
-            className="w-full h-14 rounded-2xl border-2 border-gray-200 pl-14 pr-5 outline-none focus:border-orange-500"
+            className="w-full h-14 rounded-2xl border-2 border-border pl-14 pr-5 outline-none focus:border-primary"
           />
 
         </div>
@@ -70,7 +70,7 @@ export default function SearchPage() {
 
             <div
               key={item.id}
-              className="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition"
+              className="bg-surface rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition"
             >
 
               <img
@@ -81,7 +81,7 @@ export default function SearchPage() {
 
               <div className="p-6">
 
-                <span className="text-sm text-orange-500 font-semibold">
+                <span className="text-sm text-primary font-semibold">
                   {item.category}
                 </span>
 
@@ -92,7 +92,7 @@ export default function SearchPage() {
                 <div className="flex items-center gap-2 mt-3">
 
                   <Star
-                    className="fill-yellow-400 text-yellow-400"
+                    className="fill-accent text-accent"
                     size={18}
                   />
 
@@ -100,7 +100,7 @@ export default function SearchPage() {
 
                 </div>
 
-                <p className="text-3xl font-bold text-orange-500 mt-4">
+                <p className="text-3xl font-bold text-primary mt-4">
                   ₹{item.price.toLocaleString()}
                 </p>
 
@@ -108,12 +108,12 @@ export default function SearchPage() {
 
                   <Link
                     href={`/products/${item.id}`}
-                    className="flex-1 text-center border border-orange-500 text-orange-500 py-3 rounded-xl font-semibold hover:bg-orange-50"
+                    className="flex-1 text-center border border-primary text-primary py-3 rounded-xl font-semibold hover:bg-primary/10"
                   >
                     View
                   </Link>
 
-                  <button className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 rounded-xl font-semibold">
+                  <button className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-highlight text-white py-3 rounded-xl font-semibold">
 
                     <ShoppingCart size={18} />
 

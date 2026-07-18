@@ -15,14 +15,14 @@ export default function AddressPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-orange-50 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 py-12">
       <div className="max-w-6xl mx-auto px-6">
 
         <div className="flex justify-between items-center mb-10 flex-wrap gap-4">
 
           <div>
 
-            <p className="text-orange-500 uppercase tracking-[4px] font-semibold">
+            <p className="text-primary uppercase tracking-[4px] font-semibold">
               KRITHIKSHA MART
             </p>
 
@@ -32,7 +32,7 @@ export default function AddressPage() {
 
           </div>
 
-          <button className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-2xl shadow-lg hover:scale-105 transition">
+          <button className="flex items-center gap-2 bg-gradient-to-r from-primary to-highlight text-white px-6 py-3 rounded-2xl shadow-lg hover:scale-105 transition">
 
             <Plus size={20} />
 
@@ -48,14 +48,14 @@ export default function AddressPage() {
 
             <div
               key={item.id}
-              className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100"
+              className="bg-surface rounded-3xl shadow-xl p-8 border border-border"
             >
 
               <div className="flex justify-between">
 
                 <div className="flex items-center gap-3">
 
-                  <Home className="text-orange-500" />
+                  <Home className="text-primary" />
 
                   <h2 className="font-bold text-xl">
                     {item.name}
@@ -64,24 +64,24 @@ export default function AddressPage() {
                 </div>
 
                 {item.default && (
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                  <span className="bg-success/10 text-success px-3 py-1 rounded-full text-sm font-semibold">
                     Default
                   </span>
                 )}
 
               </div>
 
-              <p className="mt-5 text-gray-600">
+              <p className="mt-5 text-muted-foreground">
                 {item.phone}
               </p>
 
-              <p className="mt-3 text-gray-600 leading-7">
+              <p className="mt-3 text-muted-foreground leading-7">
                 {item.address}
               </p>
 
               <div className="flex gap-4 mt-8">
 
-                <button className="flex items-center gap-2 bg-orange-500 text-white px-5 py-3 rounded-xl hover:bg-orange-600">
+                <button className="flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-xl hover:opacity-90">
 
                   <Pencil size={18} />
 
@@ -89,7 +89,7 @@ export default function AddressPage() {
 
                 </button>
 
-                <button className="flex items-center gap-2 border border-red-500 text-red-500 px-5 py-3 rounded-xl hover:bg-red-50">
+                <button className="flex items-center gap-2 border border-danger text-danger px-5 py-3 rounded-xl hover:bg-danger/10">
 
                   <Trash2 size={18} />
 

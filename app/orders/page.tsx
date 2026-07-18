@@ -41,22 +41,22 @@ export default function OrdersPage() {
   }, [authLoading, user, router]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-orange-50 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 py-12">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
 
         <div className="mb-10">
 
-          <p className="text-orange-500 font-semibold uppercase tracking-[4px]">
+          <p className="text-primary font-semibold uppercase tracking-[4px]">
             KRITHIKSHA MART
           </p>
 
-          <h1 className="text-5xl font-extrabold text-gray-900 mt-2">
+          <h1 className="text-5xl font-extrabold text-foreground mt-2">
             My Orders
           </h1>
 
-          <p className="text-gray-500 mt-3">
+          <p className="text-muted-foreground mt-3">
             Track and manage all your purchases in one place.
           </p>
 
@@ -64,30 +64,30 @@ export default function OrdersPage() {
 
         {loading || authLoading ? (
 
-          <div className="bg-white rounded-3xl shadow-xl p-14 text-center text-gray-500">
+          <div className="bg-surface border border-border rounded-3xl shadow-xl p-14 text-center text-muted-foreground">
             Loading your orders...
           </div>
 
         ) : orders.length === 0 ? (
 
-          <div className="bg-white rounded-3xl shadow-xl p-14 text-center">
+          <div className="bg-surface border border-border rounded-3xl shadow-xl p-14 text-center">
 
             <Package
               size={80}
-              className="mx-auto text-orange-500"
+              className="mx-auto text-primary"
             />
 
-            <h2 className="text-3xl font-bold mt-6">
+            <h2 className="text-3xl font-bold mt-6 text-foreground">
               No Orders Yet
             </h2>
 
-            <p className="text-gray-500 mt-4">
+            <p className="text-muted-foreground mt-4">
               Start shopping to see your orders here.
             </p>
 
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 mt-8 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:scale-105 transition"
+              className="inline-flex items-center gap-2 mt-8 bg-gradient-to-r from-primary to-highlight text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:scale-105 transition"
             >
               Shop Now
               <ArrowRight size={20} />
@@ -103,7 +103,7 @@ export default function OrdersPage() {
 
               <div
                 key={order._id}
-                className="bg-white rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 p-8"
+                className="bg-surface rounded-3xl shadow-xl border border-border hover:shadow-2xl transition-all duration-300 p-8"
               >
 
                 <div className="grid md:grid-cols-4 gap-8">
@@ -112,17 +112,17 @@ export default function OrdersPage() {
 
                   <div className="flex items-center gap-4">
 
-                    <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center">
-                      <Package className="text-orange-500" />
+                    <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Package className="text-primary" />
                     </div>
 
                     <div>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Order ID
                       </p>
 
-                      <h3 className="font-bold text-lg">
+                      <h3 className="font-bold text-lg text-foreground">
                         KM{order._id.slice(-8).toUpperCase()}
                       </h3>
 
@@ -134,17 +134,17 @@ export default function OrdersPage() {
 
                   <div className="flex items-center gap-4">
 
-                    <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
-                      <CalendarDays className="text-blue-600" />
+                    <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <CalendarDays className="text-secondary" />
                     </div>
 
                     <div>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Order Date
                       </p>
 
-                      <h3 className="font-semibold">
+                      <h3 className="font-semibold text-foreground">
                         {new Date(order.createdAt).toLocaleDateString()}
                       </h3>
 
@@ -156,17 +156,17 @@ export default function OrdersPage() {
 
                   <div className="flex items-center gap-4">
 
-                    <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
-                      <CircleDollarSign className="text-green-600" />
+                    <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center">
+                      <CircleDollarSign className="text-success" />
                     </div>
 
                     <div>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Total Amount
                       </p>
 
-                      <h3 className="font-bold text-orange-500 text-xl">
+                      <h3 className="font-bold text-primary text-xl">
                         ₹{order.totalAmount.toLocaleString()}
                       </h3>
 
@@ -178,23 +178,23 @@ export default function OrdersPage() {
 
                   <div className="flex items-center gap-4">
 
-                    <div className="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center">
-                      <Truck className="text-purple-600" />
+                    <div className="w-14 h-14 rounded-full bg-highlight/10 flex items-center justify-center">
+                      <Truck className="text-highlight" />
                     </div>
 
                     <div>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Status
                       </p>
 
                       <span
                         className={`inline-flex mt-1 px-4 py-2 rounded-full text-sm font-semibold ${
                           order.orderStatus === "Delivered"
-                            ? "bg-green-100 text-green-700"
+                            ? "bg-success/10 text-success"
                             : order.orderStatus === "Cancelled"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-yellow-100 text-yellow-700"
+                            ? "bg-danger/10 text-danger"
+                            : "bg-accent/10 text-accent"
                         }`}
                       >
                         {order.orderStatus}

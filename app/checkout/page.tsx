@@ -100,19 +100,19 @@ export default function CheckoutPage() {
 
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-orange-50 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 py-12">
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="mb-10">
-          <p className="text-orange-500 font-semibold uppercase tracking-[4px]">
+          <p className="text-primary font-semibold uppercase tracking-[4px]">
             KRITHIKSHA MART
           </p>
 
-          <h1 className="text-5xl font-extrabold text-gray-900 mt-2">
+          <h1 className="text-5xl font-extrabold text-foreground mt-2">
             Secure Checkout
           </h1>
 
-          <p className="text-gray-500 mt-3">
+          <p className="text-muted-foreground mt-3">
             Complete your order by entering your delivery information.
           </p>
         </div>
@@ -121,14 +121,14 @@ export default function CheckoutPage() {
 
           {/* Delivery Details */}
 
-          <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+          <div className="lg:col-span-2 bg-surface rounded-3xl shadow-xl border border-border p-8">
 
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">
+            <h2 className="text-3xl font-bold text-foreground mb-8">
               Delivery Details
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <label className="block mb-2 text-sm font-semibold text-gray-700">
+              <label className="block mb-2 text-sm font-semibold text-foreground">
                 Full Name
               </label>
 
@@ -137,10 +137,10 @@ export default function CheckoutPage() {
                 placeholder="Full Name"
                 value={formData.fullName}
                 onChange={handleChange}
-                className="h-14 w-full rounded-xl border-2 border-gray-200 bg-white px-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+                className="h-14 w-full rounded-xl border-2 border-border bg-background px-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
               />
 
-              <label className="block mb-2 text-sm font-semibold text-gray-700">
+              <label className="block mb-2 text-sm font-semibold text-foreground">
                 Email Address
               </label>
 
@@ -149,10 +149,10 @@ export default function CheckoutPage() {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
-                className="h-14 w-full rounded-xl border-2 border-gray-200 bg-white px-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+                className="h-14 w-full rounded-xl border-2 border-border bg-background px-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
               />
 
-              <label className="block mb-2 text-sm font-semibold text-gray-700">
+              <label className="block mb-2 text-sm font-semibold text-foreground">
                 Mobile Number
               </label>
 
@@ -162,9 +162,9 @@ export default function CheckoutPage() {
                 placeholder="Mobile Number"
                 value={formData.phone}
                 onChange={handleChange}
-                className="h-14 w-full rounded-xl border-2 border-gray-200 bg-white px-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+                className="h-14 w-full rounded-xl border-2 border-border bg-background px-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
               />
-              <label className="block mb-2 text-sm font-semibold text-gray-700">
+              <label className="block mb-2 text-sm font-semibold text-foreground">
                 City
               </label>
 
@@ -173,11 +173,11 @@ export default function CheckoutPage() {
                 placeholder="City"
                 value={formData.city}
                 onChange={handleChange}
-                className="h-14 w-full rounded-xl border-2 border-gray-200 bg-white px-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+                className="h-14 w-full rounded-xl border-2 border-border bg-background px-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
               />
 
             </div>
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
+            <label className="block mb-2 text-sm font-semibold text-foreground">
               Delivery Address
             </label>
             <textarea
@@ -186,10 +186,10 @@ export default function CheckoutPage() {
               value={formData.address}
               onChange={handleChange}
               rows={5}
-              className="w-full mt-6 rounded-xl border-2 border-gray-200 bg-white p-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+              className="w-full mt-6 rounded-xl border-2 border-border bg-background p-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
             />
 
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
+            <label className="block mb-2 text-sm font-semibold text-foreground">
               Pincode
             </label>
 
@@ -198,10 +198,10 @@ export default function CheckoutPage() {
               placeholder="Pincode"
               value={formData.pincode}
               onChange={handleChange}
-              className="h-14 w-full rounded-xl border-2 border-gray-200 bg-white px-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+              className="h-14 w-full rounded-xl border-2 border-border bg-background px-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
             />
 
-            <label className="block mb-2 text-sm font-semibold text-gray-700">
+            <label className="block mb-2 text-sm font-semibold text-foreground">
               Order Notes (Optional)
             </label>
 
@@ -211,7 +211,7 @@ export default function CheckoutPage() {
               value={formData.notes}
               onChange={handleChange}
               rows={4}
-              className="w-full mt-6 rounded-xl border-2 border-gray-200 bg-white p-5 text-gray-800 placeholder:text-gray-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all duration-300"
+              className="w-full mt-6 rounded-xl border-2 border-border bg-background p-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
             />
 
           </div>
@@ -220,9 +220,9 @@ export default function CheckoutPage() {
 
           <div className="sticky top-24 h-fit">
 
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+            <div className="bg-surface rounded-3xl shadow-xl border border-border p-8">
 
-              <h2 className="text-3xl font-bold text-gray-800 mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-8">
                 Order Summary
               </h2>
 
@@ -232,22 +232,22 @@ export default function CheckoutPage() {
 
                   <div
                     key={item._id}
-                    className="flex justify-between items-center border-b pb-4"
+                    className="flex justify-between items-center border-b border-border pb-4"
                   >
 
                     <div>
 
-                      <h3 className="font-semibold text-gray-800">
+                      <h3 className="font-semibold text-foreground">
                         {item.name}
                       </h3>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Qty : {item.quantity}
                       </p>
 
                     </div>
 
-                    <p className="font-bold text-orange-500">
+                    <p className="font-bold text-primary">
                       ₹{(item.price * item.quantity).toLocaleString()}
                     </p>
 
@@ -257,16 +257,16 @@ export default function CheckoutPage() {
 
               </div>
 
-              <div className="border-t mt-8 pt-6 space-y-4">
+              <div className="border-t border-border mt-8 pt-6 space-y-4 text-foreground">
 
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
                   <span>₹{total.toLocaleString()}</span>
                 </div>
 
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
-                  <span className="text-green-600 font-semibold">
+                  <span className="text-success font-semibold">
                     FREE
                   </span>
                 </div>
@@ -275,7 +275,7 @@ export default function CheckoutPage() {
 
                   <span>Total</span>
 
-                  <span className="text-orange-500">
+                  <span className="text-primary">
                     ₹{total.toLocaleString()}
                   </span>
 
@@ -286,18 +286,18 @@ export default function CheckoutPage() {
               <button
                 onClick={handlePlaceOrder}
                 disabled={placing}
-                className="w-full mt-8 h-14 rounded-2xl bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white text-lg font-bold shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
+                className="w-full mt-8 h-14 rounded-2xl bg-gradient-to-r from-highlight via-primary to-secondary text-white text-lg font-bold shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
               >
                 {placing ? "Placing Order..." : "Place Order"}
               </button>
 
-              <div className="mt-8 rounded-2xl bg-green-50 border border-green-200 p-4">
+              <div className="mt-8 rounded-2xl bg-success/10 border border-success/30 p-4">
 
-                <p className="font-semibold text-green-700">
+                <p className="font-semibold text-success">
                   🔒 Secure Checkout
                 </p>
 
-                <p className="text-sm text-green-600 mt-1">
+                <p className="text-sm text-success/90 mt-1">
                   Your payment and personal information are protected with secure encryption.
                 </p>
 

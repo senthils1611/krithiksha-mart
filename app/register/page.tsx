@@ -72,19 +72,19 @@ export default function RegisterPage() {
     }
   };
   return (
-    <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50 flex items-center justify-center px-6 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-highlight/5 flex items-center justify-center px-6 py-12">
 
-      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+      <div className="w-full max-w-lg bg-surface rounded-3xl shadow-2xl border border-border overflow-hidden">
 
         {/* Header */}
 
-        <div className="bg-gradient-to-r from-orange-500 to-red-500 p-8 text-center text-white">
+        <div className="bg-gradient-to-r from-highlight to-primary p-8 text-center text-white">
 
           <h1 className="text-4xl font-extrabold">
             Create Account
           </h1>
 
-          <p className="mt-2 text-orange-100">
+          <p className="mt-2 text-white/90">
             Join KRITHIKSHA MART and start shopping today.
           </p>
 
@@ -95,86 +95,86 @@ export default function RegisterPage() {
         <div className="p-8 space-y-5">
 
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">
+            <label className="block font-semibold text-foreground mb-2">
               Full Name
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500">
-              <User className="text-gray-400" size={20} />
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary">
+              <User className="text-muted-foreground" size={20} />
               <input
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your full name"
-                className="w-full p-4 outline-none bg-transparent"
+                className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">
+            <label className="block font-semibold text-foreground mb-2">
               Email Address
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500">
-              <Mail className="text-gray-400" size={20} />
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary">
+              <Mail className="text-muted-foreground" size={20} />
               <input
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="w-full p-4 outline-none bg-transparent"
+                className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">
+            <label className="block font-semibold text-foreground mb-2">
               Mobile Number
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500">
-              <Phone className="text-gray-400" size={20} />
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary">
+              <Phone className="text-muted-foreground" size={20} />
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="Enter your mobile number"
-                className="w-full p-4 outline-none bg-transparent"
+                className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">
+            <label className="block font-semibold text-foreground mb-2">
               Password
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500">
-              <Lock className="text-gray-400" size={20} />
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary">
+              <Lock className="text-muted-foreground" size={20} />
               <input
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Create a password"
-                className="w-full p-4 outline-none bg-transparent"
+                className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">
+            <label className="block font-semibold text-foreground mb-2">
               Confirm Password
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500">
-              <Lock className="text-gray-400" size={20} />
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary">
+              <Lock className="text-muted-foreground" size={20} />
               <input
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"
-                className="w-full p-4 outline-none bg-transparent"
+                className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function RegisterPage() {
           <button
             onClick={handleRegister}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-2xl text-lg font-bold shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
+            className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-highlight to-primary text-white py-4 rounded-2xl text-lg font-bold shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
           >
             <UserPlus size={22} />
 
@@ -192,13 +192,13 @@ export default function RegisterPage() {
 
           <div className="text-center pt-4">
 
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Already have an account?
             </p>
 
             <Link
               href="/login"
-              className="inline-block mt-2 font-bold text-orange-500 hover:underline"
+              className="inline-block mt-2 font-bold text-highlight hover:underline"
             >
               Login Here
             </Link>

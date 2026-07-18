@@ -43,25 +43,25 @@ export default function AdminDashboard() {
       title: "Total Revenue",
       value: `₹${totalRevenue.toLocaleString()}`,
       icon: IndianRupee,
-      color: "bg-green-100 text-green-600",
+      color: "bg-success/10 text-success",
     },
     {
       title: "Orders",
       value: orders.length.toString(),
       icon: ShoppingCart,
-      color: "bg-blue-100 text-blue-600",
+      color: "bg-secondary/10 text-secondary",
     },
     {
       title: "Products",
       value: productCount.toString(),
       icon: Package,
-      color: "bg-orange-100 text-orange-600",
+      color: "bg-primary/10 text-primary",
     },
     {
       title: "Customers",
       value: customerCount.toString(),
       icon: Users,
-      color: "bg-purple-100 text-purple-600",
+      color: "bg-highlight/10 text-highlight",
     },
   ];
 
@@ -90,11 +90,11 @@ export default function AdminDashboard() {
 
         <div>
 
-          <h1 className="text-3xl font-bold text-slate-800">
+          <h1 className="text-3xl font-bold text-foreground">
             Dashboard
           </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p className="text-muted-foreground mt-2">
             Welcome back 👋
           </p>
 
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
 
         <Link
           href="/admin/products"
-          className="bg-orange-500 hover:bg-orange-600 transition px-5 py-3 rounded-xl text-white font-semibold shadow"
+          className="bg-primary hover:opacity-90 transition px-5 py-3 rounded-xl text-white font-semibold shadow"
         >
           + Add Product
         </Link>
@@ -116,13 +116,13 @@ export default function AdminDashboard() {
         {stats.map((item) => (
           <div
             key={item.title}
-            className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition"
+            className="bg-surface rounded-2xl p-6 shadow hover:shadow-xl transition"
           >
             <div className="flex justify-between">
 
               <div>
 
-                <p className="text-gray-500">
+                <p className="text-muted-foreground">
                   {item.title}
                 </p>
 
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
 
       <div className="grid xl:grid-cols-3 gap-6">
 
-        <div className="bg-white rounded-2xl shadow p-6 xl:col-span-3">
+        <div className="bg-surface rounded-2xl shadow p-6 xl:col-span-3">
 
           <h2 className="text-xl font-semibold mb-5">
             Top Selling Products
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
           <div className="space-y-5">
 
             {topProducts.length === 0 ? (
-              <p className="text-gray-400">No sales data yet.</p>
+              <p className="text-muted-foreground">No sales data yet.</p>
             ) : (
               topProducts.map(([name, sold]) => (
 
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                     {name}
                   </p>
 
-                  <span className="font-bold text-orange-500">
+                  <span className="font-bold text-primary">
                     {sold} Sold
                   </span>
 
@@ -187,9 +187,9 @@ export default function AdminDashboard() {
 
       {/* Orders */}
 
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+      <div className="bg-surface rounded-2xl shadow overflow-hidden">
 
-        <div className="p-6 border-b">
+        <div className="p-6 border-b border-border">
 
           <h2 className="text-xl font-semibold">
             Recent Orders
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
 
         <table className="w-full">
 
-          <thead className="bg-slate-100">
+          <thead className="bg-surface-muted">
 
             <tr>
 
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
 
             {recentOrders.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-gray-500">
+                <td colSpan={4} className="p-8 text-center text-muted-foreground">
                   {loading ? "Loading orders..." : "No orders yet."}
                 </td>
               </tr>
@@ -225,7 +225,7 @@ export default function AdminDashboard() {
 
                 <tr
                   key={order._id}
-                  className="border-b hover:bg-slate-50"
+                  className="border-b border-border hover:bg-surface-muted"
                 >
 
                   <td className="p-4 font-semibold">
@@ -243,12 +243,12 @@ export default function AdminDashboard() {
 
                       ${
                         order.orderStatus === "Delivered"
-                          ? "bg-green-100 text-green-600"
+                          ? "bg-success/10 text-success"
                           : order.orderStatus === "Cancelled"
-                          ? "bg-red-100 text-red-600"
+                          ? "bg-danger/10 text-danger"
                           : order.orderStatus === "Processing"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-blue-100 text-blue-700"
+                          ? "bg-accent/10 text-accent"
+                          : "bg-secondary/10 text-secondary"
                       }`}
                     >
                       {order.orderStatus}

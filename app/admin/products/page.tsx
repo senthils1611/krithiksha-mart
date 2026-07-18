@@ -125,18 +125,18 @@ export default function ProductsPage() {
       <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-5">
 
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">
+          <h1 className="text-3xl font-bold text-foreground">
             Products
           </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p className="text-muted-foreground mt-2">
             Manage all products in your store.
           </p>
         </div>
 
         <button
           onClick={openAdd}
-          className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow"
+          className="bg-primary hover:opacity-90 text-white px-5 py-3 rounded-xl flex items-center gap-2 shadow"
         >
           <Plus size={18} />
           Add Product
@@ -146,12 +146,12 @@ export default function ProductsPage() {
 
       {/* Search */}
 
-      <div className="bg-white rounded-2xl shadow p-5">
+      <div className="bg-surface rounded-2xl shadow p-5">
 
         <div className="relative">
 
           <Search
-            className="absolute left-4 top-3.5 text-gray-400"
+            className="absolute left-4 top-3.5 text-muted-foreground"
             size={18}
           />
 
@@ -160,7 +160,7 @@ export default function ProductsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search products..."
-            className="w-full border rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full border border-border bg-background text-foreground rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-primary"
           />
 
         </div>
@@ -169,11 +169,11 @@ export default function ProductsPage() {
 
       {/* Table */}
 
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+      <div className="bg-surface rounded-2xl shadow overflow-hidden">
 
         <table className="w-full">
 
-          <thead className="bg-slate-100">
+          <thead className="bg-surface-muted">
 
             <tr>
 
@@ -192,13 +192,13 @@ export default function ProductsPage() {
 
             {loading ? (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-gray-500">
+                <td colSpan={6} className="p-8 text-center text-muted-foreground">
                   Loading products...
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-gray-500">
+                <td colSpan={6} className="p-8 text-center text-muted-foreground">
                   No products found.
                 </td>
               </tr>
@@ -214,7 +214,7 @@ export default function ProductsPage() {
                 return (
                   <tr
                     key={product._id}
-                    className="border-b hover:bg-slate-50"
+                    className="border-b border-border hover:bg-surface-muted"
                   >
 
                     <td className="p-4">
@@ -233,7 +233,7 @@ export default function ProductsPage() {
                             {product.name}
                           </h3>
 
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             ID #{product._id.slice(-6)}
                           </p>
 
@@ -257,10 +257,10 @@ export default function ProductsPage() {
                         className={`px-3 py-1 rounded-full text-sm font-medium
                         ${
                           status === "Active"
-                            ? "bg-green-100 text-green-700"
+                            ? "bg-success/10 text-success"
                             : status === "Low Stock"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
+                            ? "bg-accent/10 text-accent"
+                            : "bg-danger/10 text-danger"
                         }`}
                       >
                         {status}
@@ -274,14 +274,14 @@ export default function ProductsPage() {
 
                         <button
                           onClick={() => openEdit(product)}
-                          className="p-2 rounded-lg bg-green-100 text-green-600 hover:bg-green-200"
+                          className="p-2 rounded-lg bg-success/10 text-success hover:bg-success/20"
                         >
                           <Pencil size={18} />
                         </button>
 
                         <button
                           onClick={() => handleDelete(product)}
-                          className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200"
+                          className="p-2 rounded-lg bg-danger/10 text-danger hover:bg-danger/20"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -305,7 +305,7 @@ export default function ProductsPage() {
 
       {modalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-surface rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
 
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold">
@@ -321,7 +321,7 @@ export default function ProductsPage() {
                 placeholder="Name"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
               />
 
               <textarea
@@ -331,7 +331,7 @@ export default function ProductsPage() {
                   setForm({ ...form, description: e.target.value })
                 }
                 rows={3}
-                className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
               />
 
               <div className="grid grid-cols-2 gap-4">
@@ -340,7 +340,7 @@ export default function ProductsPage() {
                   placeholder="Price"
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                  className="border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
                 />
 
                 <input
@@ -348,7 +348,7 @@ export default function ProductsPage() {
                   placeholder="Stock"
                   value={form.stock}
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                  className="border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
@@ -359,14 +359,14 @@ export default function ProductsPage() {
                   onChange={(e) =>
                     setForm({ ...form, category: e.target.value })
                   }
-                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                  className="border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
                 />
 
                 <input
                   placeholder="Brand"
                   value={form.brand}
                   onChange={(e) => setForm({ ...form, brand: e.target.value })}
-                  className="border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                  className="border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
@@ -374,7 +374,7 @@ export default function ProductsPage() {
                 placeholder="Image URLs (comma separated)"
                 value={form.images}
                 onChange={(e) => setForm({ ...form, images: e.target.value })}
-                className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
               />
 
               <label className="flex items-center gap-2">
@@ -391,7 +391,7 @@ export default function ProductsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold disabled:opacity-60"
+                className="w-full bg-primary hover:opacity-90 text-white py-3 rounded-xl font-semibold disabled:opacity-60"
               >
                 {saving ? "Saving..." : editing ? "Update Product" : "Add Product"}
               </button>

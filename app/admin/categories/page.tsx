@@ -6,12 +6,10 @@ import { toast } from "sonner";
 import { getProducts } from "@/lib/api";
 
 const COLORS = [
-  "bg-blue-500",
-  "bg-pink-500",
-  "bg-orange-500",
-  "bg-purple-500",
-  "bg-green-500",
-  "bg-yellow-500",
+  "bg-primary",
+  "bg-secondary",
+  "bg-highlight",
+  "bg-accent",
 ];
 
 export default function CategoriesPage() {
@@ -47,11 +45,11 @@ export default function CategoriesPage() {
 
         <div>
 
-          <h1 className="text-3xl font-bold text-slate-800">
+          <h1 className="text-3xl font-bold text-foreground">
             Categories
           </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p className="text-muted-foreground mt-2">
             Categories are derived from your product listings.
           </p>
 
@@ -61,13 +59,13 @@ export default function CategoriesPage() {
 
       {/* Search */}
 
-      <div className="bg-white rounded-2xl shadow p-5">
+      <div className="bg-surface rounded-2xl shadow p-5">
 
         <div className="relative">
 
           <Search
             size={18}
-            className="absolute left-4 top-4 text-gray-400"
+            className="absolute left-4 top-4 text-muted-foreground"
           />
 
           <input
@@ -75,7 +73,7 @@ export default function CategoriesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search categories..."
-            className="w-full border rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full border border-border bg-background text-foreground rounded-xl pl-11 pr-4 py-3 outline-none focus:ring-2 focus:ring-primary"
           />
 
         </div>
@@ -85,11 +83,11 @@ export default function CategoriesPage() {
       {/* Cards */}
 
       {loading ? (
-        <div className="bg-white rounded-2xl shadow p-14 text-center text-gray-500">
+        <div className="bg-surface rounded-2xl shadow p-14 text-center text-muted-foreground">
           Loading categories...
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl shadow p-14 text-center text-gray-500">
+        <div className="bg-surface rounded-2xl shadow p-14 text-center text-muted-foreground">
           No categories yet. Add products with a category to see them here.
         </div>
       ) : (
@@ -99,7 +97,7 @@ export default function CategoriesPage() {
 
             <div
               key={category.name}
-              className="bg-white rounded-2xl shadow hover:shadow-xl transition-all duration-300 overflow-hidden"
+              className="bg-surface rounded-2xl shadow hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
 
               <div className={`${COLORS[i % COLORS.length]} h-3`} />
@@ -116,7 +114,7 @@ export default function CategoriesPage() {
                   {category.name}
                 </h2>
 
-                <div className="flex items-center gap-2 mt-5 text-orange-500">
+                <div className="flex items-center gap-2 mt-5 text-primary">
 
                   <Package size={18} />
 
