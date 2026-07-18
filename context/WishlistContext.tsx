@@ -9,6 +9,12 @@ import {
 } from "react";
 
 import { Product } from "@/types/product";
+import { useAuth } from "@/context/AuthContext";
+import {
+  getWishlist,
+  addToWishlistApi,
+  removeFromWishlistApi,
+} from "@/lib/api";
 
 interface WishlistContextType {
   wishlist: Product[];
@@ -27,28 +33,51 @@ export function WishlistProvider({
 }: {
   children: ReactNode;
 }) {
+  const { user, loading: authLoading } = useAuth();
   const [wishlist, setWishlist] = useState<Product[]>([]);
 
+  // Guest wishlist: localStorage
   useEffect(() => {
+    if (authLoading || user) return;
+
     const data = localStorage.getItem("wishlist");
 
     if (data) {
       setWishlist(JSON.parse(data));
     }
-  }, []);
+  }, [authLoading, user]);
 
   useEffect(() => {
+    if (user) return;
+
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  }, [wishlist]);
+  }, [wishlist, user]);
+
+  // Logged-in wishlist: backend
+  useEffect(() => {
+    if (!user) return;
+
+    getWishlist()
+      .then((data) => setWishlist(data.wishlist ?? []))
+      .catch(() => {});
+  }, [user]);
 
   const addToWishlist = (product: Product) => {
     if (wishlist.some((item) => item._id === product._id)) return;
 
-    setWishlist([...wishlist, product]);
+    setWishlist((prev) => [...prev, product]);
+
+    if (user) {
+      addToWishlistApi(product._id).catch(() => {});
+    }
   };
 
   const removeFromWishlist = (id: string) => {
-    setWishlist(wishlist.filter((item) => item._id !== id));
+    setWishlist((prev) => prev.filter((item) => item._id !== id));
+
+    if (user) {
+      removeFromWishlistApi(id).catch(() => {});
+    }
   };
 
   const isWishlisted = (id: string) => {

@@ -12,7 +12,7 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/context/AuthContext";
@@ -33,8 +33,15 @@ export default function Header() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
+  const router = useRouter();
 
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-surface/90 backdrop-blur border-b border-border shadow-sm">
@@ -61,17 +68,25 @@ export default function Header() {
 
           {/* Search */}
 
-          <div className="hidden lg:flex flex-1 max-w-xl mx-6">
+          <form
+            onSubmit={handleSearch}
+            className="hidden lg:flex flex-1 max-w-xl mx-6"
+          >
 
             <div className="flex w-full overflow-hidden rounded-full border-2 border-border bg-background focus-within:border-primary transition">
 
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for products..."
                 className="w-full px-5 py-3 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
 
-              <button className="bg-primary px-5 text-primary-foreground hover:opacity-90 transition">
+              <button
+                type="submit"
+                className="bg-primary px-5 text-primary-foreground hover:opacity-90 transition"
+              >
 
                 <Search size={20} />
 
@@ -79,7 +94,7 @@ export default function Header() {
 
             </div>
 
-          </div>
+          </form>
 
           {/* Desktop Icons */}
 
