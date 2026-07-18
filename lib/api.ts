@@ -56,6 +56,16 @@ export async function deleteProduct(id: string) {
   return res.data;
 }
 
+export async function uploadProductImage(file: File) {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await axios.post(`${API_URL}/products/upload/image`, formData, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
 // ---------- Auth ----------
 
 export async function login(email: string, password: string) {
