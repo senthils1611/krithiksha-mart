@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Plus, Pencil, Trash2, X } from "lucide-react";
+import { Search, Plus, Pencil, Trash2, X, Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   getProducts,
   createProduct,
   updateProduct,
   deleteProduct,
+  uploadProductImage,
 } from "@/lib/api";
 import { Product } from "@/types/product";
 
@@ -18,7 +19,7 @@ const emptyForm = {
   category: "",
   brand: "",
   stock: "",
-  images: "",
+  images: [] as string[],
   isFeatured: false,
 };
 
@@ -30,6 +31,7 @@ export default function ProductsPage() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const loadProducts = () => {
     setLoading(true);
@@ -58,10 +60,38 @@ export default function ProductsPage() {
       category: product.category,
       brand: product.brand ?? "",
       stock: String(product.stock ?? 0),
-      images: (product.images ?? []).join(", "),
+      images: product.images ?? [],
       isFeatured: !!product.isFeatured,
     });
     setModalOpen(true);
+  };
+
+  const handleImageUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+
+    try {
+      const uploads = await Promise.all(
+        Array.from(files).map((file) => uploadProductImage(file))
+      );
+
+      setForm((prev) => ({
+        ...prev,
+        images: [...prev.images, ...uploads.map((u) => u.url)],
+      }));
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to upload image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = (url: string) => {
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((img) => img !== url),
+    }));
   };
 
   const handleSave = async () => {
@@ -76,10 +106,7 @@ export default function ProductsPage() {
       category: form.category,
       brand: form.brand,
       stock: Number(form.stock) || 0,
-      images: form.images
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      images: form.images,
       isFeatured: form.isFeatured,
     };
 
@@ -370,12 +397,54 @@ export default function ProductsPage() {
                 />
               </div>
 
-              <input
-                placeholder="Image URLs (comma separated)"
-                value={form.images}
-                onChange={(e) => setForm({ ...form, images: e.target.value })}
-                className="w-full border border-border bg-background text-foreground rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">
+                  Product Images
+                </label>
+
+                {form.images.length > 0 && (
+                  <div className="flex flex-wrap gap-3 mb-3">
+                    {form.images.map((url) => (
+                      <div key={url} className="relative">
+                        <img
+                          src={url}
+                          alt="Product"
+                          className="w-20 h-20 object-cover rounded-xl border border-border"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(url)}
+                          className="absolute -top-2 -right-2 bg-danger text-white rounded-full p-1"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-xl px-4 py-6 cursor-pointer hover:border-primary transition text-muted-foreground">
+                  {uploading ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={18} />
+                      Click to upload image(s)
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    disabled={uploading}
+                    onChange={(e) => handleImageUpload(e.target.files)}
+                    className="hidden"
+                  />
+                </label>
+              </div>
 
               <label className="flex items-center gap-2">
                 <input
@@ -390,7 +459,7 @@ export default function ProductsPage() {
 
               <button
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving || uploading}
                 className="w-full bg-primary hover:opacity-90 text-white py-3 rounded-xl font-semibold disabled:opacity-60"
               >
                 {saving ? "Saving..." : editing ? "Update Product" : "Add Product"}

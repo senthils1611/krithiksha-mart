@@ -3,8 +3,10 @@ const {
   protect,
   adminOnly,
 } = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 const {
+  uploadImage,
   addProduct,
   getProducts,
   getProductById,
@@ -13,6 +15,8 @@ const {
 } = require("../controllers/productController");
 
 const router = express.Router();
+
+router.post("/upload/image", protect, adminOnly, upload.single("image"), uploadImage);
 
 router.post("/", protect, adminOnly, addProduct);
 

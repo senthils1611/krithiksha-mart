@@ -1,5 +1,22 @@
 const Product = require("../models/Product");
 
+// Upload Product Image
+const uploadImage = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      message: "No image file uploaded",
+    });
+  }
+
+  const url = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+
+  res.status(201).json({
+    success: true,
+    url,
+  });
+};
+
 // Add Product
 const addProduct = async (req, res) => {
   try {
@@ -119,6 +136,7 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
+  uploadImage,
   addProduct,
   getProducts,
   getProductById,
