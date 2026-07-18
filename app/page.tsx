@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -8,23 +9,26 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <Header />
 
       {/* Hero Section */}
       <Hero />
 
-      <section className="bg-orange-500 text-white py-24 text-center">
+      <section className="bg-gradient-to-r from-secondary via-secondary to-primary text-secondary-foreground py-24 text-center">
         <h2 className="text-5xl font-bold">Everything You Need</h2>
 
-        <p className="mt-4 text-xl">
+        <p className="mt-4 text-xl opacity-90">
           Shop thousands of products at affordable prices.
         </p>
 
-        <button className="mt-8 bg-white text-orange-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-200">
+        <Link
+          href="/products"
+          className="inline-block mt-8 bg-surface text-primary px-8 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition"
+        >
           Shop Now
-        </button>
+        </Link>
       </section>
 
       {/* Categories */}

@@ -40,7 +40,7 @@ export default function AdminLayout({
 
   if (loading || !user || user.role !== "admin") {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500">
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground bg-background">
         Checking access...
       </div>
     );
@@ -80,7 +80,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-slate-100 flex">
+    <div className="min-h-screen bg-background flex">
 
       {/* Mobile Overlay */}
       {open && (
@@ -92,7 +92,7 @@ export default function AdminLayout({
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static z-50 h-screen w-72 bg-slate-900 text-white shadow-2xl transform transition-transform duration-300
+        className={`fixed lg:static z-50 h-screen w-72 bg-[#1a1230] text-white shadow-2xl transform transition-transform duration-300
 
         ${
           open
@@ -100,15 +100,15 @@ export default function AdminLayout({
             : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <div className="flex items-center justify-between p-6 border-b border-slate-700">
+        <div className="flex items-center justify-between p-6 border-b border-white/10">
 
           <div>
 
             <h1 className="text-3xl font-extrabold tracking-wide">
-              <span className="text-orange-400">KM</span>
+              <span className="text-accent">KM</span>
             </h1>
 
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-white/50 mt-1">
               KRITHIKSHA MART ADMIN
             </p>
 
@@ -138,8 +138,8 @@ export default function AdminLayout({
 
                 ${
                   active
-                    ? "bg-orange-500 text-white shadow-lg"
-                    : "hover:bg-slate-800 text-slate-300"
+                    ? "bg-primary text-white shadow-lg"
+                    : "hover:bg-white/10 text-white/70"
                 }`}
               >
                 <Icon size={22} />
@@ -152,11 +152,11 @@ export default function AdminLayout({
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 w-full p-5 border-t border-slate-700">
+        <div className="absolute bottom-0 left-0 w-full p-5 border-t border-white/10">
 
           <button
             onClick={logout}
-            className="flex items-center gap-3 text-red-400 hover:text-red-300"
+            className="flex items-center gap-3 text-highlight hover:opacity-80"
           >
 
             <LogOut size={20} />
@@ -172,33 +172,33 @@ export default function AdminLayout({
       <div className="flex-1 flex flex-col">
 
         {/* Header */}
-        <header className="sticky top-0 z-30 bg-white shadow-sm px-8 py-5 flex items-center justify-between">
+        <header className="sticky top-0 z-30 bg-surface border-b border-border shadow-sm px-8 py-5 flex items-center justify-between">
 
           <div className="flex items-center gap-4">
 
             <button
               onClick={() => setOpen(true)}
-              className="lg:hidden"
+              className="lg:hidden text-foreground"
             >
               <Menu />
             </button>
 
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold text-foreground">
               Admin Dashboard
             </h2>
 
           </div>
 
-          <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-4 py-3 w-96">
+          <div className="hidden md:flex items-center bg-surface-muted rounded-xl px-4 py-3 w-96">
 
             <Search
               size={18}
-              className="text-gray-500"
+              className="text-muted-foreground"
             />
 
             <input
               placeholder="Search..."
-              className="bg-transparent outline-none ml-3 w-full"
+              className="bg-transparent outline-none ml-3 w-full text-foreground placeholder:text-muted-foreground"
             />
 
           </div>
@@ -207,9 +207,9 @@ export default function AdminLayout({
 
             <div className="relative">
 
-              <Bell className="text-gray-600" />
+              <Bell className="text-muted-foreground" />
 
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-highlight text-highlight-foreground text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
                 3
               </span>
 
@@ -225,11 +225,11 @@ export default function AdminLayout({
 
               <div className="hidden md:block">
 
-                <h4 className="font-semibold">
+                <h4 className="font-semibold text-foreground">
                   {user.name}
                 </h4>
 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Administrator
                 </p>
 

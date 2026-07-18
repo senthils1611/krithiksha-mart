@@ -10,7 +10,7 @@ import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 
 export default function Footer() {
     return (
-        <footer className="bg-slate-900 text-white">
+        <footer className="bg-[#1a1230] text-white dark:bg-surface dark:border-t dark:border-border">
 
             {/* Top */}
 
@@ -22,7 +22,7 @@ export default function Footer() {
 
                     <h2 className="text-3xl font-bold">
                         KRITHIKSHA
-                        <span className="text-orange-500"> Mart</span>
+                        <span className="text-accent"> Mart</span>
                     </h2>
 
                     <p className="mt-5 text-gray-300 leading-7">
@@ -53,27 +53,27 @@ export default function Footer() {
 
                     <div className="space-y-3">
 
-                        <Link href="/" className="block hover:text-orange-400 transition">
+                        <Link href="/" className="block hover:text-accent transition">
                             Home
                         </Link>
 
-                        <Link href="/products" className="block hover:text-orange-400 transition">
+                        <Link href="/products" className="block hover:text-accent transition">
                             Products
                         </Link>
 
-                        <Link href="/wishlist" className="block hover:text-orange-400 transition">
+                        <Link href="/wishlist" className="block hover:text-accent transition">
                             Wishlist
                         </Link>
 
-                        <Link href="/cart" className="block hover:text-orange-400 transition">
+                        <Link href="/cart" className="block hover:text-accent transition">
                             Cart
                         </Link>
 
-                        <Link href="/orders" className="block hover:text-orange-400 transition">
+                        <Link href="/orders" className="block hover:text-accent transition">
                             My Orders
                         </Link>
 
-                        <Link href="/profile" className="block hover:text-orange-400 transition">
+                        <Link href="/profile" className="block hover:text-accent transition">
                             My Profile
                         </Link>
 
@@ -93,35 +93,35 @@ export default function Footer() {
 
                     <div className="space-y-3">
 
-                        <Link href="/login" className="block hover:text-orange-400 transition">
+                        <Link href="/login" className="block hover:text-accent transition">
                             Login
                         </Link>
 
-                        <Link href="/register" className="block hover:text-orange-400 transition">
+                        <Link href="/register" className="block hover:text-accent transition">
                             Register
                         </Link>
 
-                        <Link href="/address" className="block hover:text-orange-400 transition">
+                        <Link href="/address" className="block hover:text-accent transition">
                             My Address
                         </Link>
 
-                        <Link href="/search" className="block hover:text-orange-400 transition">
+                        <Link href="/search" className="block hover:text-accent transition">
                             Search
                         </Link>
 
-                        <Link href="/contact" className="block hover:text-orange-400 transition">
+                        <Link href="/contact" className="block hover:text-accent transition">
                             Contact Us
                         </Link>
 
-                        <Link href="/about" className="block hover:text-orange-400 transition">
+                        <Link href="/about" className="block hover:text-accent transition">
                             About Us
                         </Link>
 
-                        <Link href="/privacy-policy" className="block hover:text-orange-400 transition">
+                        <Link href="/privacy-policy" className="block hover:text-accent transition">
                             Privacy Policy
                         </Link>
 
-                        <Link href="/terms" className="block hover:text-orange-400 transition">
+                        <Link href="/terms" className="block hover:text-accent transition">
                             Terms & Conditions
                         </Link>
 

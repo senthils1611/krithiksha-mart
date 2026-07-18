@@ -15,7 +15,7 @@ export default async function FeaturedProducts() {
   }
 
   return (
-    <section className="bg-gray-50 py-20">
+    <section className="bg-surface-muted py-20">
 
       <div className="max-w-7xl mx-auto px-6">
 
@@ -25,15 +25,15 @@ export default async function FeaturedProducts() {
 
           <div>
 
-            <span className="inline-flex items-center rounded-full bg-orange-100 px-4 py-1 text-sm font-semibold text-orange-600">
+            <span className="inline-flex items-center rounded-full bg-highlight/10 px-4 py-1 text-sm font-semibold text-highlight">
               🔥 Trending Collection
             </span>
 
-            <h2 className="mt-4 text-4xl font-bold text-gray-900">
+            <h2 className="mt-4 text-4xl font-bold text-foreground">
               Featured Products
             </h2>
 
-            <p className="mt-3 text-gray-500">
+            <p className="mt-3 text-muted-foreground">
               Discover our latest and most popular products.
             </p>
 
@@ -41,7 +41,7 @@ export default async function FeaturedProducts() {
 
           <Link
             href="/products"
-            className="mt-6 md:mt-0 inline-flex items-center gap-2 rounded-xl border border-blue-600 px-5 py-3 font-semibold text-blue-700 transition hover:bg-blue-700 hover:text-white"
+            className="mt-6 md:mt-0 inline-flex items-center gap-2 rounded-xl border-2 border-primary px-5 py-3 font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
           >
             View All
             <ArrowRight size={18} />
@@ -53,13 +53,13 @@ export default async function FeaturedProducts() {
 
         {products.length === 0 ? (
 
-          <div className="rounded-3xl bg-white p-16 text-center shadow">
+          <div className="rounded-3xl bg-surface p-16 text-center shadow border border-border">
 
-            <h3 className="text-3xl font-bold">
+            <h3 className="text-3xl font-bold text-foreground">
               No Products Available
             </h3>
 
-            <p className="mt-3 text-gray-500">
+            <p className="mt-3 text-muted-foreground">
               Please add products from the admin dashboard.
             </p>
 

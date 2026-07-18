@@ -14,62 +14,62 @@ const categories = [
   {
     name: "Electronics",
     icon: Laptop,
-    color: "bg-blue-100 text-blue-700",
+    color: "bg-primary/10 text-primary",
   },
   {
     name: "Mobiles",
     icon: Smartphone,
-    color: "bg-green-100 text-green-700",
+    color: "bg-secondary/10 text-secondary",
   },
   {
     name: "Fashion",
     icon: Shirt,
-    color: "bg-pink-100 text-pink-700",
+    color: "bg-highlight/10 text-highlight",
   },
   {
     name: "Home",
     icon: House,
-    color: "bg-yellow-100 text-yellow-700",
+    color: "bg-accent/10 text-accent",
   },
   {
     name: "Watches",
     icon: Watch,
-    color: "bg-purple-100 text-purple-700",
+    color: "bg-primary/10 text-primary",
   },
   {
     name: "Sports",
     icon: Dumbbell,
-    color: "bg-red-100 text-red-700",
+    color: "bg-highlight/10 text-highlight",
   },
   {
     name: "Kitchen",
     icon: ChefHat,
-    color: "bg-orange-100 text-orange-700",
+    color: "bg-accent/10 text-accent",
   },
   {
     name: "Gaming",
     icon: Gamepad2,
-    color: "bg-indigo-100 text-indigo-700",
+    color: "bg-secondary/10 text-secondary",
   },
 ];
 
 export default function Categories() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-background">
 
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="text-center mb-14">
 
-          <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+          <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold">
             Browse Categories
           </span>
 
-          <h2 className="text-4xl font-bold mt-4">
+          <h2 className="text-4xl font-bold mt-4 text-foreground">
             Shop by Category
           </h2>
 
-          <p className="text-gray-500 mt-3">
+          <p className="text-muted-foreground mt-3">
             Find products from your favourite categories.
           </p>
 
@@ -86,7 +86,7 @@ export default function Categories() {
                 href={`/products?category=${category.name}`}
                 className="group"
               >
-                <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div className="rounded-2xl border border-border bg-surface p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
 
                   <div
                     className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full ${category.color}`}
@@ -94,11 +94,11 @@ export default function Categories() {
                     <Icon size={36} />
                   </div>
 
-                  <h3 className="mt-6 text-center text-xl font-semibold">
+                  <h3 className="mt-6 text-center text-xl font-semibold text-foreground">
                     {category.name}
                   </h3>
 
-                  <p className="mt-2 text-center text-sm text-gray-500">
+                  <p className="mt-2 text-center text-sm text-muted-foreground">
                     Explore Products
                   </p>
 

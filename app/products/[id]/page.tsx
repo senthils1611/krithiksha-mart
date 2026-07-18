@@ -16,7 +16,7 @@ export default async function ProductDetails({ params }: Props) {
   if (!product) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <h1 className="text-3xl font-bold">Product Not Found</h1>
+        <h1 className="text-3xl font-bold text-foreground">Product Not Found</h1>
       </div>
     );
   }
@@ -24,13 +24,13 @@ export default async function ProductDetails({ params }: Props) {
   const originalPrice = Math.round(product.price * 1.2);
 
   return (
-    <main className="bg-slate-100 min-h-screen py-12">
+    <main className="bg-background min-h-screen py-12">
 
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Breadcrumb */}
 
-        <div className="text-sm text-gray-500 mb-8">
+        <div className="text-sm text-muted-foreground mb-8">
 
           <Link href="/">Home</Link>
 
@@ -40,7 +40,7 @@ export default async function ProductDetails({ params }: Props) {
 
           <span className="mx-2">/</span>
 
-          <span className="text-blue-700">
+          <span className="text-primary">
             {product.name}
           </span>
 
@@ -52,7 +52,7 @@ export default async function ProductDetails({ params }: Props) {
 
           {/* Image */}
 
-          <div className="bg-white rounded-3xl shadow-lg p-8">
+          <div className="bg-surface border border-border rounded-3xl shadow-lg p-8">
 
             <img
               src={product.images?.[0] || "/products/default.jpg"}
@@ -64,19 +64,19 @@ export default async function ProductDetails({ params }: Props) {
 
           {/* Details */}
 
-          <div className="bg-white rounded-3xl shadow-lg p-8">
+          <div className="bg-surface border border-border rounded-3xl shadow-lg p-8">
 
-            <span className="inline-block rounded-full bg-blue-100 text-blue-700 px-4 py-1 font-medium">
+            <span className="inline-block rounded-full bg-primary/10 text-primary px-4 py-1 font-medium">
               {product.category}
             </span>
 
-            <h1 className="mt-5 text-5xl font-bold">
+            <h1 className="mt-5 text-5xl font-bold text-foreground">
               {product.name}
             </h1>
 
-            <p className="mt-4 text-gray-600">
+            <p className="mt-4 text-muted-foreground">
               Brand :
-              <span className="font-semibold">
+              <span className="font-semibold text-foreground">
                 {" "}
                 {product.brand}
               </span>
@@ -91,12 +91,12 @@ export default async function ProductDetails({ params }: Props) {
                 <Star
                   key={item}
                   size={20}
-                  className="fill-yellow-400 text-yellow-400"
+                  className="fill-accent text-accent"
                 />
 
               ))}
 
-              <span className="text-gray-500">
+              <span className="text-muted-foreground">
                 (120 Reviews)
               </span>
 
@@ -106,15 +106,15 @@ export default async function ProductDetails({ params }: Props) {
 
             <div className="flex items-center gap-4 mt-8">
 
-              <span className="text-5xl font-bold text-orange-600">
+              <span className="text-5xl font-bold text-primary">
                 ₹{product.price}
               </span>
 
-              <span className="text-2xl text-gray-400 line-through">
+              <span className="text-2xl text-muted-foreground line-through">
                 ₹{originalPrice}
               </span>
 
-              <span className="bg-red-500 text-white rounded-full px-3 py-1 text-sm">
+              <span className="bg-highlight text-highlight-foreground rounded-full px-3 py-1 text-sm">
                 20% OFF
               </span>
 
@@ -122,7 +122,7 @@ export default async function ProductDetails({ params }: Props) {
 
             {/* Description */}
 
-            <p className="mt-8 leading-8 text-gray-700">
+            <p className="mt-8 leading-8 text-foreground">
 
               {product.description}
 
@@ -134,13 +134,13 @@ export default async function ProductDetails({ params }: Props) {
 
               {product.stock > 0 ? (
 
-                <span className="text-green-600 font-semibold text-lg">
+                <span className="text-success font-semibold text-lg">
                   ✔ In Stock ({product.stock} Available)
                 </span>
 
               ) : (
 
-                <span className="text-red-600 font-semibold">
+                <span className="text-danger font-semibold">
                   Out of Stock
                 </span>
 
@@ -158,7 +158,7 @@ export default async function ProductDetails({ params }: Props) {
 
               </div>
 
-              <button className="flex-1 rounded-xl bg-orange-500 text-white py-4 font-semibold hover:bg-orange-600 transition">
+              <button className="flex-1 rounded-xl bg-highlight text-highlight-foreground py-4 font-semibold hover:opacity-90 transition">
                 Buy Now
               </button>
 
@@ -166,13 +166,13 @@ export default async function ProductDetails({ params }: Props) {
 
             {/* Features */}
 
-            <div className="grid grid-cols-3 gap-6 mt-12 border-t pt-8">
+            <div className="grid grid-cols-3 gap-6 mt-12 border-t border-border pt-8">
 
               <div className="text-center">
 
-                <Truck className="mx-auto text-blue-700" />
+                <Truck className="mx-auto text-secondary" />
 
-                <p className="mt-3 text-sm">
+                <p className="mt-3 text-sm text-muted-foreground">
                   Free Delivery
                 </p>
 
@@ -180,9 +180,9 @@ export default async function ProductDetails({ params }: Props) {
 
               <div className="text-center">
 
-                <RotateCcw className="mx-auto text-orange-500" />
+                <RotateCcw className="mx-auto text-accent" />
 
-                <p className="mt-3 text-sm">
+                <p className="mt-3 text-sm text-muted-foreground">
                   Easy Return
                 </p>
 
@@ -190,9 +190,9 @@ export default async function ProductDetails({ params }: Props) {
 
               <div className="text-center">
 
-                <ShieldCheck className="mx-auto text-green-600" />
+                <ShieldCheck className="mx-auto text-success" />
 
-                <p className="mt-3 text-sm">
+                <p className="mt-3 text-sm text-muted-foreground">
                   Secure Payment
                 </p>
 

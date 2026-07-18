@@ -85,7 +85,7 @@ export default function AdminOrdersPage() {
             Orders
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-muted-foreground mt-2">
             Manage customer orders
           </p>
 
@@ -95,7 +95,7 @@ export default function AdminOrdersPage() {
 
       {/* Search */}
 
-      <div className="bg-white p-5 rounded-2xl shadow">
+      <div className="bg-surface p-5 rounded-2xl shadow">
 
         <div className="flex flex-col lg:flex-row gap-4">
 
@@ -103,14 +103,14 @@ export default function AdminOrdersPage() {
 
             <Search
               size={18}
-              className="absolute left-4 top-4 text-gray-400"
+              className="absolute left-4 top-4 text-muted-foreground"
             />
 
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by customer name or email..."
-              className="w-full border rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-orange-400"
+              className="w-full border border-border bg-background text-foreground rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary"
             />
 
           </div>
@@ -118,7 +118,7 @@ export default function AdminOrdersPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border rounded-xl px-5"
+            className="border border-border bg-background text-foreground rounded-xl px-5"
           >
 
             <option>All Status</option>
@@ -134,11 +134,11 @@ export default function AdminOrdersPage() {
 
       {/* Table */}
 
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+      <div className="bg-surface rounded-2xl shadow overflow-hidden">
 
         <table className="w-full">
 
-          <thead className="bg-slate-100">
+          <thead className="bg-surface-muted">
 
             <tr>
 
@@ -178,13 +178,13 @@ export default function AdminOrdersPage() {
 
             {loading ? (
               <tr>
-                <td colSpan={7} className="p-8 text-center text-gray-500">
+                <td colSpan={7} className="p-8 text-center text-muted-foreground">
                   Loading orders...
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={7} className="p-8 text-center text-gray-500">
+                <td colSpan={7} className="p-8 text-center text-muted-foreground">
                   No orders found.
                 </td>
               </tr>
@@ -193,7 +193,7 @@ export default function AdminOrdersPage() {
 
                 <tr
                   key={order._id}
-                  className="border-b hover:bg-slate-50"
+                  className="border-b border-border hover:bg-surface-muted"
                 >
 
                   <td className="p-4 font-semibold">
@@ -208,7 +208,7 @@ export default function AdminOrdersPage() {
                         {order.customer?.fullName}
                       </h3>
 
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {order.customer?.email}
                       </p>
 
@@ -220,7 +220,7 @@ export default function AdminOrdersPage() {
                     ₹{order.totalAmount.toLocaleString()}
                   </td>
 
-                  <td className="text-sm text-gray-600">
+                  <td className="text-sm text-muted-foreground">
                     {order.paymentMethod}
                   </td>
 
@@ -234,14 +234,14 @@ export default function AdminOrdersPage() {
                       className={`px-3 py-1 rounded-full text-sm border-none outline-none
                       ${
                         order.orderStatus === "Delivered"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-success/10 text-success"
                           : order.orderStatus === "Processing"
-                          ? "bg-yellow-100 text-yellow-700"
+                          ? "bg-accent/10 text-accent"
                           : order.orderStatus === "Shipped"
-                          ? "bg-blue-100 text-blue-700"
+                          ? "bg-secondary/10 text-secondary"
                           : order.orderStatus === "Cancelled"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-gray-100 text-gray-700"
+                          ? "bg-danger/10 text-danger"
+                          : "bg-surface-muted text-foreground"
                       }`}
                     >
                       {STATUSES.map((s) => (
@@ -263,7 +263,7 @@ export default function AdminOrdersPage() {
 
                       <button
                         onClick={() => handleDelete(order)}
-                        className="bg-red-100 p-2 rounded-lg text-red-600 hover:bg-red-200"
+                        className="bg-danger/10 p-2 rounded-lg text-danger hover:bg-danger/20"
                       >
                         <Trash2 size={18} />
                       </button>

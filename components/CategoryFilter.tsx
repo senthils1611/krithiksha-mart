@@ -18,7 +18,7 @@ export default function CategoryFilter({
 
       <div>
 
-        <h3 className="text-lg font-bold text-gray-800 mb-4">
+        <h3 className="text-lg font-bold text-foreground mb-4">
           Categories
         </h3>
 
@@ -28,8 +28,8 @@ export default function CategoryFilter({
             onClick={() => onSelect("All")}
             className={`w-full rounded-xl px-4 py-3 text-left transition font-medium ${
               selected === "All"
-                ? "bg-blue-600 text-white shadow-md"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-surface-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
             }`}
           >
             All Products
@@ -41,8 +41,8 @@ export default function CategoryFilter({
               onClick={() => onSelect(category)}
               className={`w-full rounded-xl px-4 py-3 text-left transition font-medium ${
                 selected === category
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-surface-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
               }`}
             >
               {category}
@@ -57,7 +57,7 @@ export default function CategoryFilter({
 
       <div>
 
-        <h3 className="text-lg font-bold text-gray-800 mb-4">
+        <h3 className="text-lg font-bold text-foreground mb-4">
           Price Range
         </h3>
 
@@ -65,10 +65,10 @@ export default function CategoryFilter({
           type="range"
           min={0}
           max={100000}
-          className="w-full accent-blue-600"
+          className="w-full accent-primary"
         />
 
-        <div className="flex justify-between text-sm text-gray-500 mt-2">
+        <div className="flex justify-between text-sm text-muted-foreground mt-2">
           <span>₹0</span>
           <span>₹100000</span>
         </div>

@@ -67,13 +67,13 @@ export default function ProductsPage() {
   }, [products, search, selectedCategory, sortBy]);
 
   return (
-    <main className="min-h-screen bg-slate-100">
+    <main className="min-h-screen bg-background">
 
       <div className="max-w-7xl mx-auto px-6 py-12">
 
         {/* Breadcrumb */}
 
-        <div className="flex items-center text-sm text-gray-500 mb-5">
+        <div className="flex items-center text-sm text-muted-foreground mb-5">
           Home
           <ChevronRight size={16} className="mx-2" />
           Products
@@ -85,12 +85,12 @@ export default function ProductsPage() {
 
           <div>
 
-            <h1 className="text-5xl font-extrabold text-slate-900">
+            <h1 className="text-5xl font-extrabold text-foreground">
               Explore Products
             </h1>
 
-            <p className="mt-3 text-gray-600">
-              <span className="font-semibold text-blue-700">
+            <p className="mt-3 text-muted-foreground">
+              <span className="font-semibold text-primary">
                 {filteredProducts.length}
               </span>{" "}
               Products Found
@@ -105,14 +105,14 @@ export default function ProductsPage() {
               onChange={setSearch}
             />
 
-            <div className="flex items-center rounded-xl bg-white shadow px-4">
+            <div className="flex items-center rounded-xl bg-surface border border-border shadow px-4">
 
-              <SlidersHorizontal size={18} className="text-gray-500" />
+              <SlidersHorizontal size={18} className="text-muted-foreground" />
 
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-transparent px-3 py-4 outline-none"
+                className="bg-transparent px-3 py-4 outline-none text-foreground"
               >
                 <option value="latest">Newest</option>
                 <option value="price-low">
@@ -140,9 +140,9 @@ export default function ProductsPage() {
 
           <aside className="lg:col-span-3">
 
-            <div className="sticky top-24 rounded-3xl bg-white shadow-lg p-6">
+            <div className="sticky top-24 rounded-3xl bg-surface border border-border shadow-lg p-6">
 
-              <h2 className="text-2xl font-bold mb-6">
+              <h2 className="text-2xl font-bold mb-6 text-foreground">
                 Filters
               </h2>
 
@@ -168,7 +168,7 @@ export default function ProductsPage() {
 
                   <div
                     key={index}
-                    className="h-96 rounded-3xl bg-white animate-pulse"
+                    className="h-96 rounded-3xl bg-surface animate-pulse"
                   />
 
                 ))}
@@ -177,13 +177,13 @@ export default function ProductsPage() {
 
             ) : filteredProducts.length === 0 ? (
 
-              <div className="rounded-3xl bg-white p-20 shadow text-center">
+              <div className="rounded-3xl bg-surface border border-border p-20 shadow text-center">
 
-                <h2 className="text-3xl font-bold">
+                <h2 className="text-3xl font-bold text-foreground">
                   No Products Found
                 </h2>
 
-                <p className="mt-4 text-gray-500">
+                <p className="mt-4 text-muted-foreground">
                   Try another category or search term.
                 </p>
 

@@ -61,19 +61,19 @@ const handleLogin = async () => {
   }
 };
   return (
-    <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50 flex items-center justify-center px-6 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center px-6 py-12">
 
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+      <div className="w-full max-w-md bg-surface rounded-3xl shadow-2xl border border-border overflow-hidden">
 
         {/* Header */}
 
-        <div className="bg-gradient-to-r from-orange-500 to-red-500 p-8 text-center text-white">
+        <div className="bg-gradient-to-r from-primary to-highlight p-8 text-center text-white">
 
           <h1 className="text-4xl font-extrabold">
             Welcome Back
           </h1>
 
-          <p className="mt-2 text-orange-100">
+          <p className="mt-2 text-white/90">
             Login to continue shopping with
           </p>
 
@@ -89,13 +89,13 @@ const handleLogin = async () => {
 
           <div className="mb-5">
 
-            <label className="block mb-2 font-semibold text-gray-700">
+            <label className="block mb-2 font-semibold text-foreground">
               Email Address
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500 transition">
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary transition">
 
-              <Mail className="text-gray-400" size={20} />
+              <Mail className="text-muted-foreground" size={20} />
 
             <input
   type="email"
@@ -103,7 +103,7 @@ const handleLogin = async () => {
   value={formData.email}
   onChange={handleChange}
   placeholder="Enter your email"
-  className="w-full p-4 outline-none bg-transparent text-gray-800 placeholder:text-gray-400"
+  className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
 />
             </div>
 
@@ -111,13 +111,13 @@ const handleLogin = async () => {
 
           <div>
 
-            <label className="block mb-2 font-semibold text-gray-700">
+            <label className="block mb-2 font-semibold text-foreground">
               Password
             </label>
 
-            <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 focus-within:border-orange-500 transition">
+            <div className="flex items-center border-2 border-border bg-background rounded-xl px-4 focus-within:border-primary transition">
 
-              <Lock className="text-gray-400" size={20} />
+              <Lock className="text-muted-foreground" size={20} />
 
              <input
   type={showPassword ? "text" : "password"}
@@ -125,7 +125,7 @@ const handleLogin = async () => {
   value={formData.password}
   onChange={handleChange}
   placeholder="Enter your password"
-  className="w-full p-4 outline-none bg-transparent text-gray-800 placeholder:text-gray-400"
+  className="w-full p-4 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
 />
 
 <button
@@ -133,9 +133,9 @@ const handleLogin = async () => {
   onClick={() => setShowPassword(!showPassword)}
 >
   {showPassword ? (
-    <EyeOff className="text-gray-400" size={20} />
+    <EyeOff className="text-muted-foreground" size={20} />
   ) : (
-    <Eye className="text-gray-400" size={20} />
+    <Eye className="text-muted-foreground" size={20} />
   )}
 </button>
             </div>
@@ -146,7 +146,7 @@ const handleLogin = async () => {
 
             <Link
               href="/forgot-password"
-              className="text-orange-500 font-medium hover:underline"
+              className="text-primary font-medium hover:underline"
             >
               Forgot Password?
             </Link>
@@ -156,7 +156,7 @@ const handleLogin = async () => {
           <button
   onClick={handleLogin}
   disabled={loading}
-  className="w-full mt-8 flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
+  className="w-full mt-8 flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-highlight text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-105 transition duration-300 disabled:opacity-60"
 >
 <LogIn size={22} />
 
@@ -166,13 +166,13 @@ const handleLogin = async () => {
 
           <div className="mt-8 text-center">
 
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Don't have an account?
             </p>
 
             <Link
               href="/register"
-              className="inline-block mt-3 text-orange-500 font-bold hover:underline"
+              className="inline-block mt-3 text-primary font-bold hover:underline"
             >
               Create a New Account
             </Link>

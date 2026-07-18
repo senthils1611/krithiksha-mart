@@ -12,7 +12,7 @@ export default function SearchBar({ value, onChange }: Props) {
       placeholder="Search products..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full border rounded-lg px-4 py-3 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="w-full border border-border bg-surface text-foreground placeholder:text-muted-foreground rounded-lg px-4 py-3 mb-6 focus:outline-none focus:ring-2 focus:ring-primary"
     />
   );
 }

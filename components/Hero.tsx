@@ -5,7 +5,7 @@ import { ArrowRight, ShieldCheck, Truck, RotateCcw, Headphones } from "lucide-re
 
 export default function Hero() {
   return (
-    <section className="bg-gradient-to-r from-blue-900 via-blue-700 to-indigo-700 text-white">
+    <section className="bg-gradient-to-br from-primary via-highlight to-accent text-white">
 
       <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24">
 
@@ -15,17 +15,17 @@ export default function Hero() {
 
           <div>
 
-            <span className="inline-block bg-orange-500 px-4 py-2 rounded-full text-sm font-semibold mb-5">
+            <span className="inline-block bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-semibold mb-5">
               🔥 Summer Sale 2026
             </span>
 
             <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight">
               Up to
-              <span className="text-orange-400"> 70% OFF </span>
+              <span className="text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.25)]"> 70% OFF </span>
               on Electronics
             </h1>
 
-            <p className="mt-6 text-lg text-blue-100 leading-8">
+            <p className="mt-6 text-lg text-white/90 leading-8">
               Discover premium mobiles, laptops, fashion,
               home appliances and much more at unbeatable prices.
             </p>
@@ -34,7 +34,7 @@ export default function Hero() {
 
               <Link
                 href="/products"
-                className="bg-orange-500 hover:bg-orange-600 transition px-8 py-4 rounded-xl font-semibold flex items-center gap-2"
+                className="bg-white text-primary hover:scale-105 transition px-8 py-4 rounded-xl font-semibold flex items-center gap-2 shadow-lg"
               >
                 Shop Now
                 <ArrowRight size={20} />
@@ -42,7 +42,7 @@ export default function Hero() {
 
               <Link
                 href="/deals"
-                className="border border-white px-8 py-4 rounded-xl hover:bg-white hover:text-blue-700 transition"
+                className="border-2 border-white/70 px-8 py-4 rounded-xl hover:bg-white hover:text-primary transition font-semibold"
               >
                 Explore Deals
               </Link>
@@ -55,11 +55,13 @@ export default function Hero() {
 
           <div className="hidden lg:flex justify-center">
 
-            <img
-              src="/hero-shopping.png"
-              alt="Shopping"
-              className="w-full max-w-lg drop-shadow-2xl"
-            />
+            <div className="relative flex h-80 w-80 items-center justify-center rounded-full bg-white/15 backdrop-blur">
+              <div className="flex h-56 w-56 items-center justify-center rounded-full bg-white/20 text-8xl">
+                🛍️
+              </div>
+              <span className="absolute -top-2 right-6 text-4xl">🎉</span>
+              <span className="absolute bottom-4 -left-4 text-4xl">✨</span>
+            </div>
 
           </div>
 
@@ -69,45 +71,45 @@ export default function Hero() {
 
       {/* Bottom Features */}
 
-      <div className="bg-white text-gray-800">
+      <div className="bg-surface text-foreground">
 
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 px-6 py-8">
 
           <div className="flex items-center gap-3">
-            <Truck className="text-blue-700" />
+            <Truck className="text-secondary" />
             <div>
               <h4 className="font-semibold">Free Delivery</h4>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 On orders above ₹999
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <ShieldCheck className="text-green-600" />
+            <ShieldCheck className="text-success" />
             <div>
               <h4 className="font-semibold">Secure Payment</h4>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 100% Protected
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <RotateCcw className="text-orange-500" />
+            <RotateCcw className="text-accent" />
             <div>
               <h4 className="font-semibold">Easy Returns</h4>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 7 Day Return Policy
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <Headphones className="text-purple-600" />
+            <Headphones className="text-highlight" />
             <div>
               <h4 className="font-semibold">24/7 Support</h4>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Dedicated Help
               </p>
             </div>

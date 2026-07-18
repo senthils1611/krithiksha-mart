@@ -9,11 +9,14 @@ import {
   User,
   Menu,
   X,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -28,28 +31,29 @@ export default function Header() {
   const { wishlistCount } = useWishlist();
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
 
   const [mobileMenu, setMobileMenu] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className="sticky top-0 z-50 bg-surface/90 backdrop-blur border-b border-border shadow-sm">
 
       {/* Top Header */}
 
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
 
-        <div className="h-20 flex items-center justify-between">
+        <div className="h-20 flex items-center justify-between gap-4">
 
           {/* Logo */}
 
           <Link href="/">
             <h1 className="text-3xl font-extrabold tracking-wide">
-              <span className="text-blue-700">
+              <span className="text-primary">
                 KRITHIKSHA
               </span>
 
-              <span className="text-orange-500">
+              <span className="text-highlight">
                 {" "}Mart
               </span>
             </h1>
@@ -57,17 +61,17 @@ export default function Header() {
 
           {/* Search */}
 
-          <div className="hidden lg:flex flex-1 max-w-xl mx-10">
+          <div className="hidden lg:flex flex-1 max-w-xl mx-6">
 
-            <div className="flex w-full overflow-hidden rounded-full border border-gray-300 shadow-sm">
+            <div className="flex w-full overflow-hidden rounded-full border-2 border-border bg-background focus-within:border-primary transition">
 
               <input
                 type="text"
                 placeholder="Search for products..."
-                className="w-full px-5 py-3 outline-none"
+                className="w-full px-5 py-3 outline-none bg-transparent text-foreground placeholder:text-muted-foreground"
               />
 
-              <button className="bg-orange-500 px-5 text-white hover:bg-orange-600 transition">
+              <button className="bg-primary px-5 text-primary-foreground hover:opacity-90 transition">
 
                 <Search size={20} />
 
@@ -79,30 +83,38 @@ export default function Header() {
 
           {/* Desktop Icons */}
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-5">
+
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="text-muted-foreground hover:text-accent transition"
+            >
+              {theme === "dark" ? <Sun size={22} /> : <Moon size={22} />}
+            </button>
 
             <Link
               href="/wishlist"
-              className="relative hover:text-orange-500 transition"
+              className="relative text-foreground hover:text-highlight transition"
             >
               <Heart />
 
               {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs h-5 w-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-highlight text-highlight-foreground text-xs h-5 w-5 rounded-full flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
             </Link>
             <Link
               href="/cart"
-              className="relative hover:text-orange-500 transition"
+              className="relative text-foreground hover:text-secondary transition"
             >
 
               <ShoppingCart />
 
               {cartCount > 0 && (
 
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs h-5 w-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-xs h-5 w-5 rounded-full flex items-center justify-center">
 
                   {cartCount}
 
@@ -117,7 +129,7 @@ export default function Header() {
                 {user.role === "admin" && (
                   <Link
                     href="/admin"
-                    className="text-sm font-semibold text-blue-700 hover:text-orange-500 transition"
+                    className="text-sm font-semibold text-primary hover:text-highlight transition"
                   >
                     Admin
                   </Link>
@@ -125,7 +137,7 @@ export default function Header() {
 
                 <Link
                   href="/profile"
-                  className="hover:text-orange-500 transition"
+                  className="text-foreground hover:text-accent transition"
                   title={user.name}
                 >
                   <User />
@@ -133,7 +145,7 @@ export default function Header() {
 
                 <button
                   onClick={logout}
-                  className="text-sm font-medium text-gray-600 hover:text-orange-500 transition"
+                  className="text-sm font-medium text-muted-foreground hover:text-highlight transition"
                 >
                   Logout
                 </button>
@@ -141,7 +153,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/login"
-                className="hover:text-orange-500 transition"
+                className="text-foreground hover:text-accent transition"
               >
                 <User />
               </Link>
@@ -151,14 +163,26 @@ export default function Header() {
 
           {/* Mobile Button */}
 
-          <button
-            onClick={() => setMobileMenu(!mobileMenu)}
-            className="md:hidden"
-          >
+          <div className="flex items-center gap-3 md:hidden">
 
-            {mobileMenu ? <X /> : <Menu />}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="text-muted-foreground"
+            >
+              {theme === "dark" ? <Sun size={22} /> : <Moon size={22} />}
+            </button>
 
-          </button>
+            <button
+              onClick={() => setMobileMenu(!mobileMenu)}
+              className="text-foreground"
+            >
+
+              {mobileMenu ? <X /> : <Menu />}
+
+            </button>
+
+          </div>
 
         </div>
 
@@ -166,7 +190,7 @@ export default function Header() {
 
       {/* Navigation */}
 
-      <div className="hidden md:block border-t bg-gray-50">
+      <div className="hidden md:block border-t border-border bg-surface-muted">
 
         <div className="max-w-7xl mx-auto">
 
@@ -178,8 +202,8 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 className={`font-medium transition ${pathname === item.href
-                    ? "text-blue-700 border-b-2 border-blue-700 pb-1"
-                    : "text-gray-700 hover:text-orange-500"
+                    ? "text-primary border-b-2 border-primary pb-1"
+                    : "text-muted-foreground hover:text-highlight"
                   }`}
               >
 
@@ -199,7 +223,7 @@ export default function Header() {
 
       {mobileMenu && (
 
-        <div className="md:hidden bg-white border-t">
+        <div className="md:hidden bg-surface border-t border-border">
 
           <nav className="flex flex-col">
 
@@ -209,7 +233,7 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenu(false)}
-                className="px-6 py-4 border-b hover:bg-gray-50"
+                className="px-6 py-4 border-b border-border hover:bg-surface-muted text-foreground"
               >
 
                 {item.name}
@@ -220,21 +244,21 @@ export default function Header() {
 
             <Link
               href="/wishlist"
-              className="px-6 py-4 border-b"
+              className="px-6 py-4 border-b border-border text-foreground"
             >
               Wishlist
             </Link>
 
             <Link
               href="/profile"
-              className="px-6 py-4 border-b"
+              className="px-6 py-4 border-b border-border text-foreground"
             >
               Profile
             </Link>
 
             <Link
               href="/cart"
-              className="px-6 py-4 border-b"
+              className="px-6 py-4 border-b border-border text-foreground"
             >
               Cart ({cartCount})
             </Link>
@@ -245,7 +269,7 @@ export default function Header() {
                   <Link
                     href="/admin"
                     onClick={() => setMobileMenu(false)}
-                    className="px-6 py-4 border-b"
+                    className="px-6 py-4 border-b border-border text-foreground"
                   >
                     Admin
                   </Link>
@@ -255,7 +279,7 @@ export default function Header() {
                     setMobileMenu(false);
                     logout();
                   }}
-                  className="px-6 py-4 text-left"
+                  className="px-6 py-4 text-left text-highlight"
                 >
                   Logout
                 </button>
@@ -264,7 +288,7 @@ export default function Header() {
               <Link
                 href="/login"
                 onClick={() => setMobileMenu(false)}
-                className="px-6 py-4"
+                className="px-6 py-4 text-foreground"
               >
                 Login
               </Link>
