@@ -2,16 +2,31 @@
 
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { createOrder } from "@/lib/api";
+import { createOrder, getAddresses, addAddress } from "@/lib/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { MapPin, Plus } from "lucide-react";
+
+type Address = {
+  _id: string;
+  fullName: string;
+  phone: string;
+  address: string;
+  city: string;
+  pincode: string;
+  isDefault: boolean;
+};
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [placing, setPlacing] = useState(false);
+
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | "new">("new");
+  const [saveNewAddress, setSaveNewAddress] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -40,6 +55,55 @@ export default function CheckoutPage() {
       }));
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    getAddresses()
+      .then((data) => {
+        const list: Address[] = data.addresses ?? [];
+        setAddresses(list);
+
+        const defaultAddr = list.find((a) => a.isDefault) ?? list[0];
+
+        if (defaultAddr) {
+          setSelectedAddressId(defaultAddr._id);
+          setFormData((prev) => ({
+            ...prev,
+            fullName: defaultAddr.fullName,
+            phone: defaultAddr.phone,
+            address: defaultAddr.address,
+            city: defaultAddr.city,
+            pincode: defaultAddr.pincode,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, [user]);
+
+  const selectAddress = (addr: Address) => {
+    setSelectedAddressId(addr._id);
+    setFormData((prev) => ({
+      ...prev,
+      fullName: addr.fullName,
+      phone: addr.phone,
+      address: addr.address,
+      city: addr.city,
+      pincode: addr.pincode,
+    }));
+  };
+
+  const selectNewAddress = () => {
+    setSelectedAddressId("new");
+    setFormData((prev) => ({
+      ...prev,
+      fullName: user?.name ?? "",
+      phone: user?.phone ?? "",
+      address: "",
+      city: "",
+      pincode: "",
+    }));
+  };
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -86,6 +150,17 @@ export default function CheckoutPage() {
         totalAmount: total,
       });
 
+      if (selectedAddressId === "new" && saveNewAddress) {
+        addAddress({
+          fullName: formData.fullName,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          pincode: formData.pincode,
+          isDefault: addresses.length === 0,
+        }).catch(() => {});
+      }
+
       clearCart();
       router.push(`/order-success?orderId=${data.order._id}`);
     } catch (error: any) {
@@ -126,6 +201,55 @@ export default function CheckoutPage() {
             <h2 className="text-3xl font-bold text-foreground mb-8">
               Delivery Details
             </h2>
+
+            {addresses.length > 0 && (
+              <div className="mb-8">
+                <h3 className="text-sm font-semibold text-foreground mb-3">
+                  Choose a saved address
+                </h3>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {addresses.map((addr) => (
+                    <button
+                      key={addr._id}
+                      type="button"
+                      onClick={() => selectAddress(addr)}
+                      className={`text-left rounded-xl border-2 p-4 transition ${
+                        selectedAddressId === addr._id
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 font-semibold text-foreground">
+                        <MapPin size={16} className="text-primary" />
+                        {addr.fullName}
+                        {addr.isDefault && (
+                          <span className="text-xs font-normal bg-success/10 text-success px-2 py-0.5 rounded-full">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {addr.address}, {addr.city} - {addr.pincode}
+                      </p>
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={selectNewAddress}
+                    className={`flex items-center justify-center gap-2 rounded-xl border-2 border-dashed p-4 transition font-semibold ${
+                      selectedAddressId === "new"
+                        ? "border-primary text-primary bg-primary/5"
+                        : "border-border text-muted-foreground hover:border-primary/50"
+                    }`}
+                  >
+                    <Plus size={18} />
+                    Use a New Address
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="grid md:grid-cols-2 gap-6">
               <label className="block mb-2 text-sm font-semibold text-foreground">
@@ -201,7 +325,18 @@ export default function CheckoutPage() {
               className="h-14 w-full rounded-xl border-2 border-border bg-background px-5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300"
             />
 
-            <label className="block mb-2 text-sm font-semibold text-foreground">
+            {selectedAddressId === "new" && (
+              <label className="flex items-center gap-2 mt-6 text-foreground">
+                <input
+                  type="checkbox"
+                  checked={saveNewAddress}
+                  onChange={(e) => setSaveNewAddress(e.target.checked)}
+                />
+                Save this address for future orders
+              </label>
+            )}
+
+            <label className="block mb-2 mt-6 text-sm font-semibold text-foreground">
               Order Notes (Optional)
             </label>
 
