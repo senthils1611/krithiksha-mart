@@ -171,7 +171,7 @@ export async function createOrder(data: Record<string, unknown>) {
 }
 
 export async function getMyOrders() {
-  const res = await axios.get(`${API_URL}/orders/my`, {
+  const res = await axios.get(`${API_URL}/orders/myorders`, {
     headers: authHeaders(),
   });
   return res.data;
@@ -195,6 +195,24 @@ export async function updateOrderStatus(id: string, orderStatus: string) {
 
 export async function deleteOrder(id: string) {
   const res = await axios.delete(`${API_URL}/orders/${id}`, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+// ---------- Razorpay ----------
+
+export async function createRazorpayOrder(items: { productId: string; quantity: number }[]) {
+  const res = await axios.post(
+    `${API_URL}/orders/razorpay/create`,
+    { items },
+    { headers: authHeaders() }
+  );
+  return res.data;
+}
+
+export async function verifyRazorpayPayment(data: Record<string, unknown>) {
+  const res = await axios.post(`${API_URL}/orders/razorpay/verify`, data, {
     headers: authHeaders(),
   });
   return res.data;

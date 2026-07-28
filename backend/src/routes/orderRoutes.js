@@ -5,6 +5,8 @@ const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 const {
   createOrder,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
   getMyOrders,
   getAllOrders,
   getOrderById,
@@ -12,7 +14,12 @@ const {
   deleteOrder,
 } = require("../controllers/orderController");
 
+// Cash on Delivery
 router.post("/", protect, createOrder);
+
+// Razorpay flow
+router.post("/razorpay/create", protect, createRazorpayOrder);
+router.post("/razorpay/verify", protect, verifyRazorpayPayment);
 
 router.get("/my", protect, getMyOrders);
 

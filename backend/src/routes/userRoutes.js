@@ -3,17 +3,26 @@ const router = express.Router();
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const {
+  registerUser,
   getMe,
   updateMe,
   getAllUsers,
+} = require("../controllers/userController");
+
+const {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
+} = require("../controllers/wishlistController");
+
+const {
   getAddresses,
   addAddress,
   updateAddress,
   deleteAddress,
-} = require("../controllers/userController");
+} = require("../controllers/addressController");
+
+router.post("/register", registerUser);
 
 router.get("/me", protect, getMe);
 router.put("/me", protect, updateMe);

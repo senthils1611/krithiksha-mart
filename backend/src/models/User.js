@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
@@ -29,16 +30,6 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-      },
-    ],
-    addresses: [
-      {
-        fullName: { type: String, required: true },
-        phone: { type: String, required: true },
-        address: { type: String, required: true },
-        city: { type: String, required: true },
-        pincode: { type: String, required: true },
-        isDefault: { type: Boolean, default: false },
       },
     ],
   },
