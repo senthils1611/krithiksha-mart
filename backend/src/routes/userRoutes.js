@@ -3,7 +3,6 @@ const router = express.Router();
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const {
-  registerUser,
   getMe,
   updateMe,
   getAllUsers,
@@ -21,8 +20,6 @@ const {
   updateAddress,
   deleteAddress,
 } = require("../controllers/addressController");
-
-router.post("/register", registerUser);
 
 router.get("/me", protect, getMe);
 router.put("/me", protect, updateMe);

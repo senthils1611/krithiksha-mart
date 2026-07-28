@@ -217,3 +217,37 @@ export async function verifyRazorpayPayment(data: Record<string, unknown>) {
   });
   return res.data;
 }
+
+
+// ---------- Categories ----------
+
+export async function getCategories() {
+  const res = await fetch(`${API_URL}/categories`, { cache: "no-store" });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+
+  return res.json();
+}
+
+export async function addCategory(data: Record<string, unknown>) {
+  const res = await axios.post(`${API_URL}/categories`, data, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+export async function updateCategory(id: string, data: Record<string, unknown>) {
+  const res = await axios.put(`${API_URL}/categories/${id}`, data, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}
+
+export async function deleteCategory(id: string) {
+  const res = await axios.delete(`${API_URL}/categories/${id}`, {
+    headers: authHeaders(),
+  });
+  return res.data;
+}

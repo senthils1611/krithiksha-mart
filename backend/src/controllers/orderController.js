@@ -2,6 +2,8 @@ const crypto = require("crypto");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const razorpay = require("../config/razorpay");
+const sendEmail = require("../utils/sendEmail");
+const buildOrderConfirmationEmail = require("../utils/orderConfirmationEmail");
 
 // Shared helper: validate items against real DB prices/stock, return computed totals
 async function buildOrderItems(items) {
@@ -44,6 +46,11 @@ async function deductStock(orderItems) {
   }
 }
 
+function sendOrderConfirmation(order) {
+  const { subject, html } = buildOrderConfirmationEmail(order);
+  sendEmail({ to: order.customer.email, subject, html });
+}
+
 // Place a Cash on Delivery order — logged-in users only
 exports.createOrder = async (req, res) => {
   try {
@@ -68,6 +75,8 @@ exports.createOrder = async (req, res) => {
     });
 
     await deductStock(orderItems);
+
+    sendOrderConfirmation(order);
 
     res.status(201).json({
       success: true,
@@ -94,11 +103,10 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
 
-    // Validate items and get the real, server-computed total — never trust client amounts
     const { totalAmount } = await buildOrderItems(items);
 
     const razorpayOrder = await razorpay.orders.create({
-      amount: Math.round(totalAmount * 100), // Razorpay expects paise
+      amount: Math.round(totalAmount * 100),
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     });
@@ -140,7 +148,6 @@ exports.verifyRazorpayPayment = async (req, res) => {
       });
     }
 
-    // Verify the signature using our secret — proves this payment is genuine
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
@@ -153,7 +160,6 @@ exports.verifyRazorpayPayment = async (req, res) => {
       });
     }
 
-    // Recompute the real total server-side again (never trust client amounts)
     const { orderItems, totalAmount } = await buildOrderItems(items);
 
     const order = await Order.create({
@@ -168,6 +174,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
     });
 
     await deductStock(orderItems);
+
+    sendOrderConfirmation(order);
 
     res.status(201).json({
       success: true,

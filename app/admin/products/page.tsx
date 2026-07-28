@@ -9,8 +9,11 @@ import {
   updateProduct,
   deleteProduct,
   uploadProductImage,
+  getCategories,
 } from "@/lib/api";
 import { Product } from "@/types/product";
+
+type CategoryOption = { _id: string; name: string };
 
 const emptyForm = {
   name: "",
@@ -22,6 +25,25 @@ const emptyForm = {
   images: [] as string[],
   isFeatured: false,
 };
+
+const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
+
+  const loadProducts = () => {
+    setLoading(true);
+    getProducts()
+      .then((data) => setProducts(data.products ?? []))
+      .catch(() => toast.error("Failed to load products"))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadProducts();
+    getCategories()
+      .then((data) => setCategories(data.categories ?? []))
+      .catch(() => {});
+  }, []);
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
